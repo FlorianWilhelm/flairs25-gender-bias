@@ -16,6 +16,8 @@ jupyterlab = ">=4.3.4,<5"
 seaborn = ">=0.13.2,<0.14"
 pandas = ">=2.2.3,<3"
 tqdm = ">=4.67.1,<5"
+ray-default = ">=2.40.0,<3"
+python = "3.12.*"
 
 [feature.dev.dependencies]
 ruff = "*"

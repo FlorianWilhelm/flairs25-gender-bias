@@ -4,7 +4,6 @@ import hashlib
 from copy import deepcopy
 from itertools import product
 from collections.abc import Iterator
-from logging import getLogger
 from typing import TypeVar
 
 
@@ -17,16 +16,26 @@ from scipy.stats import dirichlet, expon, beta, gamma
 from scipy.stats._multivariate import dirichlet_frozen
 import ray
 
-_log = getLogger(__name__)
 
 class QuotaType(Enum):
-    "Enumeration for the different types of quotas"
+    """Enumeration for the different types of quotas"""
 
     NONE = auto()
     GTE20 = 0.2
     GTE30 = 0.3
     GTE40 = 0.4
     EQU50 = auto()
+
+
+class GenderBias(Enum):
+    """Enumeration for the different gender biases"""
+
+    NONE = 0.0
+    LOW = 0.1
+    MEDIUM = 0.2
+    HIGH = 0.3
+    VERY_HIGH = 0.4
+    EXTREME = 0.5
 
 
 @dataclass
@@ -58,7 +67,7 @@ class Data:
 class Experiment:
     data: Data
     quota: QuotaType
-    gender_bias: float
+    gender_bias: GenderBias
     res: OptimizeResult
 
     @property
@@ -106,7 +115,7 @@ class Experiment:
         return self.data.caps
 
     @property
-    def g1_caps(self) -> np.ndarray:
+    def g1_role(self) -> np.ndarray:
         return (
             (self.alloc * self.data.genders.reshape(self.data.params.n_persons, 1))
             .sum(axis=0)
@@ -114,7 +123,7 @@ class Experiment:
         )
 
     @property
-    def g0_caps(self) -> np.ndarray:
+    def g0_role(self) -> np.ndarray:
         return (
             (
                 self.alloc
@@ -126,11 +135,15 @@ class Experiment:
 
     @property
     def g1_caps_perc(self) -> np.ndarray:
-        return self.g1_caps / self.data.caps
+        return self.g1_role / self.data.caps
 
     @property
     def g0_caps_perc(self) -> np.ndarray:
-        return self.g0_caps / self.data.caps
+        return self.g0_role / self.data.caps
+
+    @property
+    def g1_g0_perc(self) -> float:
+        return self.g1_role / (self.g1_role + self.g0_role)
 
 
 @dataclass
@@ -210,7 +223,7 @@ def gen_gender_prefs(
             dist_g1.rvs(size=rest, random_state=rng),
         )
     )
-    genders = np.array([0] * half + [1] * rest)
+    genders = np.array([0] * half + [1] * rest, dtype=int)
     return preferences, genders
 
 
@@ -284,7 +297,7 @@ def allocate_roles(
     genders: np.ndarray,
     caps: np.ndarray,
     quota: QuotaType,
-    gender_bias: float = 0.0,
+    gender_bias: float,
 ) -> OptimizeResult:
     """Allocate the roles to the persons based on their preferences and the given quotas.
 
@@ -312,29 +325,33 @@ def allocate_roles(
     A_ub = np.vstack((A_ub_cap, A_ub_rol))
     b_ub = np.hstack((b_ub_cap, b_ub_rol))
 
-    con_kwargs = {}
     match quota:
         case QuotaType.NONE:
             pass
         case QuotaType.EQU50:
             # equality constraints: exactly 50% for each gender in each role
-            A_eq = np.zeros((n_roles, n_roles * n_persons))
+            A_ub_eq = np.zeros((2 * n_roles, n_roles * n_persons))
             for i in range(n_roles):
-                A_eq[i, i::n_roles] = quota.value - genders
-            b_eq = break_by_weights(genders.sum(), 0.5 * caps/caps.sum())
-            con_kwargs |= {"A_eq": A_eq, "b_eq": b_eq}
+                A_ub_eq[2 * i, i::n_roles] = 0.5 - genders
+                A_ub_eq[2 * i + 1, i::n_roles] = genders - 0.5
+            b_ub_eq = np.zeros(2 * n_roles)
+            b_ub_eq[::2] = 0.5
+            b_ub_eq[1::2] = -0.5
+
+            A_ub = np.vstack((A_ub, A_ub_eq))
+            b_ub = np.hstack((b_ub, b_ub_eq))
+
         case QuotaType() as quota:
             # inequality constraints: at least x0% of gender 1 in each role
-            A_ub_20 = np.zeros((n_roles, n_roles * n_persons))
+            A_ub_x0 = np.zeros((n_roles, n_roles * n_persons))
             for i in range(n_roles):
-                A_ub_20[i, i::n_roles] = quota.value - genders
-            b_ub_20 = np.zeros(n_roles)
+                A_ub_x0[i, i::n_roles] = quota.value - genders
+            b_ub_x0 = np.zeros(n_roles)
 
-            A_ub = np.vstack((A_ub, A_ub_20))
-            b_ub = np.hstack((b_ub, b_ub_20))
+            A_ub = np.vstack((A_ub, A_ub_x0))
+            b_ub = np.hstack((b_ub, b_ub_x0))
 
-    con_kwargs |= {"A_ub": A_ub, "b_ub": b_ub}
-    res = linprog(c=c, **con_kwargs, bounds=bounds, integrality=1)
+    res = linprog(c=c, A_ub=A_ub, b_ub=b_ub, bounds=bounds, integrality=1)
 
     return res
 
@@ -369,13 +386,13 @@ def generate_data(
     return Data(params=params, prefs=prefs, genders=genders, caps=caps, tvd=tvd)
 
 
-def run_experiment(data: Data, quota: QuotaType, gender_bias: float) -> Experiment:
+def run_experiment(data: Data, quota: QuotaType, gender_bias: GenderBias) -> Experiment:
     res = allocate_roles(
         prefs=data.prefs,
         genders=data.genders,
         caps=data.caps,
         quota=quota,
-        gender_bias=gender_bias,
+        gender_bias=gender_bias.value,
     )
     return Experiment(data=data, quota=quota, gender_bias=gender_bias, res=res)
 
@@ -387,13 +404,12 @@ def run_simulation(
     n_persons: int,
     total_cap: int,
     n_sims: int = 1,
-    gender_bias: float = 0.0,
     rng: Generator | None = None,
 ) -> list[Simulation]:
-    print('Running simulation with params: %s', locals())
+    print("Running simulation with params: %s", locals())
     simulations = []
     with tqdm(
-        total=n_sims * len(QuotaType), desc="Simulations", leave=False
+        total=n_sims * len(QuotaType) * len(GenderBias), desc="Simulations", leave=False
     ) as progress:
         for _ in range(n_sims):
             data = generate_data(
@@ -405,14 +421,18 @@ def run_simulation(
                 rng=rng,
             )
             experiments = []
-            for quota in QuotaType:
-                experiments.append(run_experiment(data=data, quota=quota, gender_bias=gender_bias))
+            for quota, gender_bias in product(QuotaType, GenderBias):
+                experiments.append(
+                    run_experiment(data=data, quota=quota, gender_bias=gender_bias)
+                )
                 progress.update(1)
             simulations.append(Simulation(data=data, experiments=experiments))
     return simulations
 
 
 T = TypeVar("T")
+
+
 def ray_pipeline(jobs: Iterator[T], n_jobs: int, n_parallel: int) -> Iterator[T]:
     """Run a pipeline of jobs with a given number of parallel tasks.
 
@@ -436,54 +456,6 @@ def ray_pipeline(jobs: Iterator[T], n_jobs: int, n_parallel: int) -> Iterator[T]
             yield ray.get(done_jobs[0])
 
 
-def all_simulations(
-    n_parallel: int, rng: Generator | int | None = None
-) -> Iterator[Simulation]:
-    alpha_prefs_set = [1, 5]
-    alpha_caps_set = [5, 10]
-    n_roles_set = [5, 10, 20]
-    n_persons_set = [500, 1000, 2_000]
-    total_cap_set = [500, 1_000, 2_000]
-    n_simulations_set = [1]
-    gender_bias_set = [0., 0.1, 0.2, 0.3, 0.4, 0.5]
-
-    rng = np.random.default_rng(seed=rng)
-    all_combinations = list(
-        product(
-            alpha_prefs_set,
-            alpha_caps_set,
-            n_roles_set,
-            n_persons_set,
-            total_cap_set,
-            n_simulations_set,
-            gender_bias_set,
-        )
-    )
-    jobs = (
-        ray.remote(run_simulation).remote(
-            alpha_prefs=alpha_prefs,
-            alpha_caps=alpha_caps,
-            n_roles=n_roles,
-            n_persons=n_person,
-            total_cap=total_cap,
-            gender_bias=gender_bias,
-            n_sims=n_simulations,
-            rng=deepcopy(rng),
-        )
-        for (
-            alpha_prefs,
-            alpha_caps,
-            n_roles,
-            n_person,
-            total_cap,
-            n_simulations,
-            gender_bias,
-        ) in all_combinations
-    )
-
-    return ray_pipeline(jobs, n_jobs=len(all_combinations), n_parallel=n_parallel)
-
-
 def make_df(simulations: list[Simulation]) -> pd.DataFrame:
     rows = []
     for sim in simulations:
@@ -493,7 +465,7 @@ def make_df(simulations: list[Simulation]) -> pd.DataFrame:
                 "lambda": sim.data.params.alpha_prefs,
                 "n_roles": sim.data.params.n_roles,
                 "n_persons": sim.data.params.n_persons,
-                "gender_bias": exp.gender_bias,
+                "gender_bias": exp.gender_bias.name,
                 "alpha_prefs": sim.data.params.alpha_prefs,
                 "alpha_caps": sim.data.params.alpha_caps,
                 "total_g0": sim.data.genders.size - sim.data.genders.sum(),
@@ -506,14 +478,16 @@ def make_df(simulations: list[Simulation]) -> pd.DataFrame:
             }
             if exp.is_good:
                 row |= {
+                    "fun": exp.res.fun,
                     "total_util": exp.total_util,
                     "total_util_biased": exp.total_util_biased,
                     "g0_util": exp.g0_util,
                     "g1_util": exp.g1_util,
-                    "g0_caps": exp.g0_caps,
+                    "g0_role": exp.g0_role,
                     "g0_caps_perc": exp.g0_caps_perc,
-                    "g1_caps": exp.g1_caps,
+                    "g1_role": exp.g1_role,
                     "g1_caps_perc": exp.g1_caps_perc,
+                    "g1_g0_perc": exp.g1_g0_perc,
                     "n_alloc": exp.n_alloc,
                     "alloc_persons_perc": exp.alloc_persons_perc,
                     "alloc_caps_perc": exp.alloc_caps_perc,
@@ -521,12 +495,76 @@ def make_df(simulations: list[Simulation]) -> pd.DataFrame:
             rows.append(row)
     df = pd.DataFrame(rows)
 
-    def add_util_perc(df: pd.DataFrame, col: str) -> pd.DataFrame:
-        none_util = df[df["quota"] == QuotaType.NONE.name].set_index("id")[col]
-        return df[col] / df["id"].map(none_util)
+    def add_util_perc(df: pd.DataFrame, col: str, group_cols: list) -> pd.Series:
+        none_util = (
+            df[df["quota"] == QuotaType.NONE.name]
+            .groupby(group_cols)[col]
+            .first()  # Take the first value for each group
+        )
+
+        def compute_row(row):
+            key = tuple(row[group_cols])
+            return row[col] / none_util.get(key, float("nan"))
+
+        return df.apply(compute_row, axis=1)
 
     if exp.is_good:
-        df["total_util_perc"] = add_util_perc(df, "total_util")
-        df["g0_util_perc"] = add_util_perc(df, "g0_util")
-        df["g1_util_perc"] = add_util_perc(df, "g1_util")
+        group_cols = ["id", "gender_bias"]  # Define the columns to group by
+        df["total_util_perc"] = add_util_perc(df, "total_util", group_cols)
+        df["g0_util_perc"] = add_util_perc(df, "g0_util", group_cols)
+        df["g1_util_perc"] = add_util_perc(df, "g1_util", group_cols)
     return df
+
+
+def all_simulations(
+    n_parallel: int, rng: Generator | int | None = None
+) -> Iterator[Simulation]:
+    alpha_prefs_set = [1, 5]
+    alpha_caps_set = [5, 10]
+    n_roles_set = [5, 10, 20]
+    n_persons_set = [500, 1000, 2_000]
+    total_cap_set = [500, 1_000, 2_000]
+    n_simulations = 100
+
+    rng = np.random.default_rng(seed=rng)
+    all_combinations = list(
+        product(
+            alpha_prefs_set,
+            alpha_caps_set,
+            n_roles_set,
+            n_persons_set,
+            total_cap_set,
+        )
+    )
+    jobs = (
+        ray.remote(run_simulation).remote(
+            alpha_prefs=alpha_prefs,
+            alpha_caps=alpha_caps,
+            n_roles=n_roles,
+            n_persons=n_person,
+            total_cap=total_cap,
+            n_sims=n_simulations,
+            rng=deepcopy(rng),
+        )
+        for (
+            alpha_prefs,
+            alpha_caps,
+            n_roles,
+            n_person,
+            total_cap,
+        ) in all_combinations
+    )
+
+    return ray_pipeline(jobs, n_jobs=len(all_combinations), n_parallel=n_parallel)
+
+
+if __name__ == "__main__":
+    import pickle
+
+    ray.init(log_to_driver=False, _system_config={"local_fs_capacity_threshold": 0.99})
+    all_dfs = []
+    for simulations in all_simulations(n_parallel=32, rng=42):
+        file_name = str(simulations[0])
+        with open(f"simulations/{file_name}.pkl", "wb") as fh:
+            pickle.dump(simulations, fh)
+        all_dfs.append(make_df(simulations))

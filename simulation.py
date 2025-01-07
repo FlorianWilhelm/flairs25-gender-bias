@@ -568,3 +568,7 @@ if __name__ == "__main__":
         with open(f"simulations/{file_name}.pkl", "wb") as fh:
             pickle.dump(simulations, fh)
         all_dfs.append(make_df(simulations))
+
+    df = pd.concat(all_dfs)
+    df.to_csv("simulations.csv", index=False)
+    ray.shutdown()

@@ -5,6 +5,7 @@ from copy import deepcopy
 from itertools import product
 from collections.abc import Iterator
 from typing import TypeVar
+import gc
 
 
 import numpy as np
@@ -562,13 +563,15 @@ if __name__ == "__main__":
     import pickle
 
     ray.init(log_to_driver=False, _system_config={"local_fs_capacity_threshold": 0.99})
-    all_dfs = []
     for simulations in all_simulations(n_parallel=32, rng=42):
         file_name = str(simulations[0])
         with open(f"simulations/{file_name}.pkl", "wb") as fh:
             pickle.dump(simulations, fh)
-        all_dfs.append(make_df(simulations))
+        df = make_df(simulations)
+        df.to_csv(f"{file_name}.csv", index=False)
 
-    df = pd.concat(all_dfs)
-    df.to_csv("simulations.csv", index=False)
+        # Explicitly delete references and trigger garbage collection
+        del simulations, df
+        gc.collect()
+
     ray.shutdown()

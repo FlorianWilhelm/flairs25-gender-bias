@@ -523,8 +523,8 @@ def all_simulations(
     alpha_prefs_set = [1, 5]
     alpha_caps_set = [5, 10]
     n_roles_set = [5, 10, 20]
-    n_persons_set = [500, 1000, 2_000]
-    total_cap_set = [500, 1_000, 2_000]
+    n_persons_set = [50, 100, 200]
+    total_cap_set = [50, 100, 200]
     n_simulations = 100
 
     rng = np.random.default_rng(seed=rng)

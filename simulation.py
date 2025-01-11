@@ -289,6 +289,7 @@ def gen_capacities(
     while True:
         weights = stick_breaking(alpha, n_cap, rng)  # larger ones will be in front
         caps = break_by_weights(total_cap, weights)
+        caps = np.where(caps % 2 == 0, caps, caps + 1)  # ensure even number of roles
         if np.all(caps > 0):
             break
     return caps

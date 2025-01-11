@@ -225,7 +225,8 @@ def gen_gender_prefs(
         )
     )
     genders = np.array([0] * half + [1] * rest, dtype=int)
-    return preferences, genders
+    perm = rng.permutation(num)
+    return preferences[perm], genders[perm]
 
 
 def stick_breaking(
@@ -306,6 +307,7 @@ def allocate_roles(
     where x_ij is the indicator variable for person i in role j.
     """
     n_persons, n_roles = prefs.shape
+    assert n_persons % 2 == 0, "Number of persons must be even."
     assert n_roles == caps.size
     assert n_persons == genders.size
 
@@ -326,21 +328,17 @@ def allocate_roles(
     A_ub = np.vstack((A_ub_cap, A_ub_rol))
     b_ub = np.hstack((b_ub_cap, b_ub_rol))
 
+    con_kwargs = {}
     match quota:
         case QuotaType.NONE:
             pass
         case QuotaType.EQU50:
             # equality constraints: exactly 50% for each gender in each role
-            A_ub_eq = np.zeros((2 * n_roles, n_roles * n_persons))
+            A_eq = np.zeros((n_roles, n_roles * n_persons))
             for i in range(n_roles):
-                A_ub_eq[2 * i, i::n_roles] = 0.5 - genders
-                A_ub_eq[2 * i + 1, i::n_roles] = genders - 0.5
-            b_ub_eq = np.zeros(2 * n_roles)
-            b_ub_eq[::2] = 0.5
-            b_ub_eq[1::2] = -0.5
-
-            A_ub = np.vstack((A_ub, A_ub_eq))
-            b_ub = np.hstack((b_ub, b_ub_eq))
+                A_eq[i, i::n_roles] = 0.5 - genders
+            b_eq = np.zeros(n_roles)
+            con_kwargs |= {"A_eq": A_eq, "b_eq": b_eq}
 
         case QuotaType() as quota:
             # inequality constraints: at least x0% of gender 1 in each role
@@ -352,7 +350,8 @@ def allocate_roles(
             A_ub = np.vstack((A_ub, A_ub_x0))
             b_ub = np.hstack((b_ub, b_ub_x0))
 
-    res = linprog(c=c, A_ub=A_ub, b_ub=b_ub, bounds=bounds, integrality=1)
+    con_kwargs |= {"A_ub": A_ub, "b_ub": b_ub}
+    res = linprog(c=c, **con_kwargs, bounds=bounds, integrality=1)
 
     return res
 
@@ -381,7 +380,7 @@ def generate_data(
     alpha_g0, alpha_g1 = gen_alphas(dim=n_roles, alpha=alpha_prefs, tvd=tvd, rng=rng)
     prior_g0 = dirichlet(alpha_g0)
     prior_g1 = dirichlet(alpha_g1)
-    prefs, genders = gen_gender_prefs(num=n_persons, dist_g0=prior_g0, dist_g1=prior_g1)
+    prefs, genders = gen_gender_prefs(num=n_persons, dist_g0=prior_g0, dist_g1=prior_g1, rng=rng)
     tvd = calc_tvd(prior_g0.mean(), prior_g1.mean())
     caps = gen_capacities(n_cap=n_roles, total_cap=total_cap, alpha=alpha_caps, rng=rng)
     return Data(params=params, prefs=prefs, genders=genders, caps=caps, tvd=tvd)
@@ -407,6 +406,7 @@ def run_simulation(
     n_sims: int = 1,
     rng: Generator | None = None,
 ) -> list[Simulation]:
+    rng = np.random.default_rng(seed=rng)
     print("Running simulation with params: %s", locals())
     simulations = []
     with tqdm(
@@ -502,6 +502,7 @@ def make_df(simulations: list[Simulation]) -> pd.DataFrame:
             .groupby(group_cols)[col]
             .first()  # Take the first value for each group
         )
+        none_util.loc[none_util == 0] = 1e-3  # Avoid division by zero
 
         def compute_row(row):
             key = tuple(row[group_cols])
@@ -520,11 +521,11 @@ def make_df(simulations: list[Simulation]) -> pd.DataFrame:
 def all_simulations(
     n_parallel: int, rng: Generator | int | None = None
 ) -> Iterator[Simulation]:
-    alpha_prefs_set = [1, 5]
-    alpha_caps_set = [5, 10]
-    n_roles_set = [5, 10, 20]
-    n_persons_set = [50, 100, 200]
-    total_cap_set = [50, 100, 200]
+    alpha_prefs_set = [1]
+    alpha_caps_set = [5]
+    n_roles_set = [3, 5, 10, 20]
+    n_persons_set = [50, 100, 250, 500]
+    total_cap_set = [20, 50, 100, 250, 500]
     n_simulations = 100
 
     rng = np.random.default_rng(seed=rng)
@@ -568,7 +569,7 @@ if __name__ == "__main__":
         with open(f"simulations/{file_name}.pkl", "wb") as fh:
             pickle.dump(simulations, fh)
         df = make_df(simulations)
-        df.to_csv(f"{file_name}.csv", index=False)
+        df.to_csv(f"simulations/{file_name}.csv", index=False)
 
         # Explicitly delete references and trigger garbage collection
         del simulations, df

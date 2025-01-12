@@ -503,25 +503,31 @@ def make_df(simulations: list[Simulation]) -> pd.DataFrame:
             rows.append(row)
     df = pd.DataFrame(rows)
 
-    def add_util_perc(df: pd.DataFrame, col: str, group_cols: list) -> pd.Series:
-        none_util = (
-            df[df["quota"] == QuotaType.NONE.name]
-            .groupby(group_cols)[col]
-            .first()  # Take the first value for each group
-        )
-        none_util.loc[none_util == 0] = 1e-3  # Avoid division by zero
+    # def add_util_perc(df: pd.DataFrame, col: str, group_cols: list) -> pd.Series:
+    #     none_util = (
+    #         df[df["quota"] == QuotaType.NONE.name]
+    #         .groupby(group_cols)[col]
+    #         .first()  # Take the first value for each group
+    #     )
+    #     none_util.loc[none_util == 0] = 1e-3  # Avoid division by zero
 
-        def compute_row(row):
-            key = tuple(row[group_cols])
-            return row[col] / none_util.get(key, float("nan"))
+    #     def compute_row(row):
+    #         key = tuple(row[group_cols])
+    #         return row[col] / none_util.get(key, float("nan"))
 
-        return df.apply(compute_row, axis=1)
+    #     return df.apply(compute_row, axis=1)
+    
+    def add_util_perc(df: pd.DataFrame, col:str ) -> pd.DataFrame:
+        mask = (df['quota'] == QuotaType.NONE.name) & (df['gender_bias'] == GenderBias.NONE.name)
+        none_util = df[mask].set_index('id')[col]
+        none_util = df[mask].set_index('id')[col]
+        return df[col] / df['id'].map(none_util)
 
     if exp.is_good:
-        group_cols = ["id", "gender_bias"]  # Define the columns to group by
-        df["total_util_perc"] = add_util_perc(df, "total_util", group_cols)
-        df["g0_util_perc"] = add_util_perc(df, "g0_util", group_cols)
-        df["g1_util_perc"] = add_util_perc(df, "g1_util", group_cols)
+        # group_cols = ["id", "gender_bias"]  # Define the columns to group by
+        df["total_util_perc"] = add_util_perc(df, "total_util")
+        df["g0_util_perc"] = add_util_perc(df, "g0_util")
+        df["g1_util_perc"] = add_util_perc(df, "g1_util")
     return df
 
 

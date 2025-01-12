@@ -260,7 +260,7 @@ def stick_breaking(
     return weights_arr / weights_arr.sum()  # normalize as we truncated the process
 
 
-def break_by_weights(total: int, weights: np.ndarray) -> np.ndarray:
+def break_by_weights_even(total: int, weights: np.ndarray) -> np.ndarray:
     """
     Break a total number of items into components according to the given weights.
 
@@ -271,14 +271,20 @@ def break_by_weights(total: int, weights: np.ndarray) -> np.ndarray:
     Returns:
         np.ndarray: Number of items in each component.
     """
+    assert np.isclose(weights.sum(), 1), "Weights must sum to 1."
+    assert total % 2 == 0, "Total number of items must be even."
+
     weights = weights / np.sum(weights)
     float_parts = weights * total
-    int_parts = np.floor(float_parts).astype(int)
+    int_parts = (np.floor(float_parts / 2) * 2).astype(int)
     remainder = total - int_parts.sum()
     residuals = float_parts - int_parts
-    indices = np.argsort(-residuals)[:remainder]
-    int_parts[indices] += 1
-    assert int_parts.sum() == total
+    indices = np.argsort(-residuals)[:remainder // 2]
+    int_parts[indices] += 2
+    
+    assert int_parts.sum() == total, "Sum of parts does not match the total."
+    assert np.all(int_parts % 2 == 0), "Not all parts are even."
+    
     return int_parts
 
 
@@ -288,7 +294,7 @@ def gen_capacities(
     rng = np.random.default_rng(seed=rng)
     while True:
         weights = stick_breaking(alpha, n_cap, rng)  # larger ones will be in front
-        caps = break_by_weights(total_cap, weights)
+        caps = break_by_weights_even(total_cap, weights)
         caps = np.where(caps % 2 == 0, caps, caps + 1)  # ensure even number of roles
         if np.all(caps > 0):
             break
@@ -565,7 +571,7 @@ if __name__ == "__main__":
     import pickle
 
     ray.init(log_to_driver=False, _system_config={"local_fs_capacity_threshold": 0.99})
-    for simulations in all_simulations(n_parallel=32, rng=42):
+    for simulations in all_simulations(n_parallel=24, rng=42):
         file_name = str(simulations[0])
         with open(f"simulations/{file_name}.pkl", "wb") as fh:
             pickle.dump(simulations, fh)

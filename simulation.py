@@ -26,6 +26,7 @@ class QuotaType(Enum):
     GTE30 = 0.3
     GTE40 = 0.4
     EQU50 = auto()
+    PREF = auto()
 
 
 class GenderBias(Enum):
@@ -43,7 +44,7 @@ class GenderBias(Enum):
 class Params:
     alpha_prefs: float
     alpha_caps: float
-    n_roles: int
+    n_positions: int
     n_persons: int
     total_cap: int
     rng: Generator
@@ -77,7 +78,7 @@ class Experiment:
 
     @property
     def alloc(self) -> np.ndarray:
-        return self.res.x.reshape(self.data.params.n_persons, self.data.params.n_roles)
+        return self.res.x.reshape(self.data.params.n_persons, self.data.params.n_positions)
 
     @property
     def n_alloc(self) -> int:
@@ -116,7 +117,7 @@ class Experiment:
         return self.data.caps
 
     @property
-    def g1_role(self) -> np.ndarray:
+    def g1_pos(self) -> np.ndarray:
         return (
             (self.alloc * self.data.genders.reshape(self.data.params.n_persons, 1))
             .sum(axis=0)
@@ -124,7 +125,7 @@ class Experiment:
         )
 
     @property
-    def g0_role(self) -> np.ndarray:
+    def g0_pos(self) -> np.ndarray:
         return (
             (
                 self.alloc
@@ -136,15 +137,15 @@ class Experiment:
 
     @property
     def g1_caps_perc(self) -> np.ndarray:
-        return self.g1_role / self.data.caps
+        return self.g1_pos / self.data.caps
 
     @property
     def g0_caps_perc(self) -> np.ndarray:
-        return self.g0_role / self.data.caps
+        return self.g0_pos / self.data.caps
 
     @property
     def g1_g0_perc(self) -> float:
-        return self.g1_role / (self.g1_role + self.g0_role)
+        return self.g1_pos / (self.g1_pos + self.g0_pos)
 
 
 @dataclass
@@ -158,7 +159,7 @@ class Simulation:
 
     def __str__(self) -> str:
         p = self.data.params
-        return f"Sim_{len(self.experiments)}_n_persons{p.n_persons}_n_roles{p.n_roles}_total_cap{p.total_cap}_a_prefs{p.alpha_prefs}_a_caps{p.alpha_caps}_id{self.id}"
+        return f"Sim_{len(self.experiments)}_n_persons{p.n_persons}_n_pos{p.n_positions}_total_cap{p.total_cap}_a_prefs{p.alpha_prefs}_a_caps{p.alpha_caps}_id{self.id}"
 
 
 def log_safe(x: np.ndarray, epsilon: float = 1e-12) -> np.ndarray:
@@ -291,46 +292,47 @@ def break_by_weights_even(total: int, weights: np.ndarray) -> np.ndarray:
 def gen_capacities(
     n_cap: int, total_cap: int, alpha: float, rng: Generator | int | None = None
 ) -> np.ndarray:
+    """Generate capacities for the positions based on a Dirichlet Process."""
     rng = np.random.default_rng(seed=rng)
     while True:
         weights = stick_breaking(alpha, n_cap, rng)  # larger ones will be in front
         caps = break_by_weights_even(total_cap, weights)
-        caps = np.where(caps % 2 == 0, caps, caps + 1)  # ensure even number of roles
+        caps = np.where(caps % 2 == 0, caps, caps + 1)  # ensure even number of capacities
         if np.all(caps > 0):
             break
     return caps
 
 
-def allocate_roles(
+def gen_matching(
     prefs: np.ndarray,
     genders: np.ndarray,
     caps: np.ndarray,
     quota: QuotaType,
     gender_bias: float,
 ) -> OptimizeResult:
-    """Allocate the roles to the persons based on their preferences and the given quotas.
+    """Allocate the persons to the positions based on their preferences and the given quotas.
 
     Note that vector x is flattened, i.e. x = [x_11, x_12, ..., x_1n, x_21, ..., x_mn],
-    where x_ij is the indicator variable for person i in role j.
+    where x_ij is the indicator variable for person i in position j.
     """
-    n_persons, n_roles = prefs.shape
+    n_persons, n_positions = prefs.shape
     assert n_persons % 2 == 0, "Number of persons must be even."
-    assert n_roles == caps.size
+    assert n_positions == caps.size
     assert n_persons == genders.size
 
     # Define linear program
     ## objective function: minimize -preferences
     c = -(prefs + gender_bias * (1 - genders).reshape(-1, 1)).flatten()
     bounds = (0, 1)
-    ## inequality constraints: sum of persons in roles <= capacities of roles
-    A_ub_cap = np.zeros((n_roles, n_roles * n_persons))
-    for i in range(n_roles):
-        A_ub_cap[i, i::n_roles] = 1
+    ## inequality constraints: sum of persons in position <= capacities of positions
+    A_ub_cap = np.zeros((n_positions, n_positions * n_persons))
+    for i in range(n_positions):
+        A_ub_cap[i, i::n_positions] = 1
     b_ub_cap = caps
-    ## inequality constraints: each person gets at most one role
-    A_ub_rol = np.zeros((n_persons, n_roles * n_persons))
+    ## inequality constraints: each person gets at most one position
+    A_ub_rol = np.zeros((n_persons, n_positions * n_persons))
     for i in range(n_persons):
-        A_ub_rol[i, i * n_roles : (i + 1) * n_roles] = 1
+        A_ub_rol[i, i * n_positions : (i + 1) * n_positions] = 1
     b_ub_rol = np.ones(n_persons)
     A_ub = np.vstack((A_ub_cap, A_ub_rol))
     b_ub = np.hstack((b_ub_cap, b_ub_rol))
@@ -340,19 +342,19 @@ def allocate_roles(
         case QuotaType.NONE:
             pass
         case QuotaType.EQU50:
-            # equality constraints: exactly 50% for each gender in each role
-            A_eq = np.zeros((n_roles, n_roles * n_persons))
-            for i in range(n_roles):
-                A_eq[i, i::n_roles] = 0.5 - genders
-            b_eq = np.zeros(n_roles)
+            # equality constraints: exactly 50% for each gender in each position
+            A_eq = np.zeros((n_positions, n_positions * n_persons))
+            for i in range(n_positions):
+                A_eq[i, i::n_positions] = 0.5 - genders
+            b_eq = np.zeros(n_positions)
             con_kwargs |= {"A_eq": A_eq, "b_eq": b_eq}
 
         case QuotaType() as quota:
-            # inequality constraints: at least x0% of gender 1 in each role
-            A_ub_x0 = np.zeros((n_roles, n_roles * n_persons))
-            for i in range(n_roles):
-                A_ub_x0[i, i::n_roles] = quota.value - genders
-            b_ub_x0 = np.zeros(n_roles)
+            # inequality constraints: at least x0% of gender 1 in each position
+            A_ub_x0 = np.zeros((n_positions, n_positions * n_persons))
+            for i in range(n_positions):
+                A_ub_x0[i, i::n_positions] = quota.value - genders
+            b_ub_x0 = np.zeros(n_positions)
 
             A_ub = np.vstack((A_ub, A_ub_x0))
             b_ub = np.hstack((b_ub, b_ub_x0))
@@ -366,7 +368,7 @@ def allocate_roles(
 def generate_data(
     alpha_prefs: float,
     alpha_caps: float,
-    n_roles: int,
+    n_positions: int,
     n_persons: int,
     total_cap: int,
     tvd: float | None = None,
@@ -375,7 +377,7 @@ def generate_data(
     params = Params(
         alpha_prefs=alpha_prefs,
         alpha_caps=alpha_caps,
-        n_roles=n_roles,
+        n_positions=n_positions,
         n_persons=n_persons,
         total_cap=total_cap,
         rng=deepcopy(rng),
@@ -384,17 +386,17 @@ def generate_data(
     tvd = tvd or rng.uniform(0, 1)
     assert 0 <= tvd <= 1
 
-    alpha_g0, alpha_g1 = gen_alphas(dim=n_roles, alpha=alpha_prefs, tvd=tvd, rng=rng)
+    alpha_g0, alpha_g1 = gen_alphas(dim=n_positions, alpha=alpha_prefs, tvd=tvd, rng=rng)
     prior_g0 = dirichlet(alpha_g0)
     prior_g1 = dirichlet(alpha_g1)
     prefs, genders = gen_gender_prefs(num=n_persons, dist_g0=prior_g0, dist_g1=prior_g1, rng=rng)
     tvd = calc_tvd(prior_g0.mean(), prior_g1.mean())
-    caps = gen_capacities(n_cap=n_roles, total_cap=total_cap, alpha=alpha_caps, rng=rng)
+    caps = gen_capacities(n_cap=n_positions, total_cap=total_cap, alpha=alpha_caps, rng=rng)
     return Data(params=params, prefs=prefs, genders=genders, caps=caps, tvd=tvd)
 
 
 def run_experiment(data: Data, quota: QuotaType, gender_bias: GenderBias) -> Experiment:
-    res = allocate_roles(
+    res = gen_matching(
         prefs=data.prefs,
         genders=data.genders,
         caps=data.caps,
@@ -407,7 +409,7 @@ def run_experiment(data: Data, quota: QuotaType, gender_bias: GenderBias) -> Exp
 def run_simulation(
     alpha_prefs: float,
     alpha_caps: float,
-    n_roles: int,
+    n_positions: int,
     n_persons: int,
     total_cap: int,
     n_sims: int = 1,
@@ -423,7 +425,7 @@ def run_simulation(
             data = generate_data(
                 alpha_prefs=alpha_prefs,
                 alpha_caps=alpha_caps,
-                n_roles=n_roles,
+                n_positions=n_positions,
                 n_persons=n_persons,
                 total_cap=total_cap,
                 rng=rng,
@@ -471,7 +473,7 @@ def make_df(simulations: list[Simulation]) -> pd.DataFrame:
             row = {
                 "id": sim.id,
                 "lambda": sim.data.params.alpha_prefs,
-                "n_roles": sim.data.params.n_roles,
+                "n_positions": sim.data.params.n_positions,
                 "n_persons": sim.data.params.n_persons,
                 "gender_bias": exp.gender_bias.name,
                 "alpha_prefs": sim.data.params.alpha_prefs,
@@ -491,9 +493,9 @@ def make_df(simulations: list[Simulation]) -> pd.DataFrame:
                     "total_util_biased": exp.total_util_biased,
                     "g0_util": exp.g0_util,
                     "g1_util": exp.g1_util,
-                    "g0_role": exp.g0_role,
+                    "g0_pos": exp.g0_pos,
                     "g0_caps_perc": exp.g0_caps_perc,
-                    "g1_role": exp.g1_role,
+                    "g1_pos": exp.g1_pos,
                     "g1_caps_perc": exp.g1_caps_perc,
                     "g1_g0_perc": exp.g1_g0_perc,
                     "n_alloc": exp.n_alloc,
@@ -536,9 +538,9 @@ def all_simulations(
 ) -> Iterator[Simulation]:
     alpha_prefs_set = [1]
     alpha_caps_set = [5]
-    n_roles_set = [3, 5, 10, 20]
-    n_persons_set = [50, 100, 250, 500]
-    total_cap_set = [20, 50, 100, 250, 500]
+    n_positions_set = [5, 10]
+    n_persons_set = [250]
+    total_cap_set = [100]
     n_simulations = 100
 
     rng = np.random.default_rng(seed=rng)
@@ -546,7 +548,7 @@ def all_simulations(
         product(
             alpha_prefs_set,
             alpha_caps_set,
-            n_roles_set,
+            n_positions_set,
             n_persons_set,
             total_cap_set,
         )
@@ -555,7 +557,7 @@ def all_simulations(
         ray.remote(run_simulation).remote(
             alpha_prefs=alpha_prefs,
             alpha_caps=alpha_caps,
-            n_roles=n_roles,
+            n_positions=n_positions,
             n_persons=n_person,
             total_cap=total_cap,
             n_sims=n_simulations,
@@ -564,7 +566,7 @@ def all_simulations(
         for (
             alpha_prefs,
             alpha_caps,
-            n_roles,
+            n_positions,
             n_person,
             total_cap,
         ) in all_combinations

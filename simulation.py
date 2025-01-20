@@ -162,10 +162,6 @@ class Simulation:
         return f"Sim_{len(self.experiments)}_n_persons{p.n_persons}_n_pos{p.n_positions}_total_cap{p.total_cap}_a_prefs{p.alpha_prefs}_a_caps{p.alpha_caps}_id{self.id}"
 
 
-def log_safe(x: np.ndarray, epsilon: float = 1e-12) -> np.ndarray:
-    return np.log(np.maximum(x, epsilon))
-
-
 def calc_tvd(p: np.ndarray, q: np.ndarray) -> float:
     "Total variation distance between two probability distributions"
     return 0.5 * np.sum(np.abs(p - q))
@@ -217,6 +213,7 @@ def gen_gender_prefs(
     dist_g1: dirichlet_frozen,
     rng: Generator | int | None = None,
 ) -> tuple[np.ndarray, np.ndarray]:
+    """Generate preferences for persons based on a Dirichlet prior distribution based on gender."""
     half = num // 2
     rest = num - half
     preferences = np.vstack(
@@ -303,6 +300,33 @@ def gen_capacities(
     return caps
 
 
+def approx_exp_pref(prefs: np.ndarray) -> np.ndarray:
+    """Generate a quota based on the preferences of the persons."""
+    argmax_positions = np.argmax(prefs, axis=1)
+    n_positions = prefs.shape[1]
+    position_counts = np.bincount(argmax_positions, minlength=n_positions)
+    return position_counts / np.sum(position_counts)
+
+
+def gen_pref_quota(prefs: np.ndarray, genders: np.ndarray) -> np.ndarray:
+    """Generate a quota based on the preferences of the persons."""
+    g0 = prefs[genders == 0]
+    g1 = prefs[genders == 1]
+    exp0 = approx_exp_pref(g0)
+    exp1 = approx_exp_pref(g1)
+
+    quota = np.zeros_like(exp1)
+    nonzero_mask = exp1 > 0
+    quota[nonzero_mask] = exp1[nonzero_mask] / (exp0[nonzero_mask] + exp1[nonzero_mask])
+    return quota
+
+
+def floor_to_decimal(values, decimal_places):
+    """Floor the values to a given number of decimal places."""
+    factor = 10 ** decimal_places
+    return np.floor(values * factor) / factor
+
+
 def gen_matching(
     prefs: np.ndarray,
     genders: np.ndarray,
@@ -341,6 +365,7 @@ def gen_matching(
     match quota:
         case QuotaType.NONE:
             pass
+
         case QuotaType.EQU50:
             # equality constraints: exactly 50% for each gender in each position
             A_eq = np.zeros((n_positions, n_positions * n_persons))
@@ -348,6 +373,17 @@ def gen_matching(
                 A_eq[i, i::n_positions] = 0.5 - genders
             b_eq = np.zeros(n_positions)
             con_kwargs |= {"A_eq": A_eq, "b_eq": b_eq}
+
+        case QuotaType.PREF:
+            # inequality constraints
+            q = floor_to_decimal(gen_pref_quota(prefs, genders), 1)
+            A_ub_x0 = np.zeros((n_positions, n_positions * n_persons))
+            for i in range(n_positions):
+                A_ub_x0[i, i::n_positions] = q[i] - genders
+            b_ub_x0 = np.zeros(n_positions)
+
+            A_ub = np.vstack((A_ub, A_ub_x0))
+            b_ub = np.hstack((b_ub, b_ub_x0))
 
         case QuotaType() as quota:
             # inequality constraints: at least x0% of gender 1 in each position
@@ -358,6 +394,9 @@ def gen_matching(
 
             A_ub = np.vstack((A_ub, A_ub_x0))
             b_ub = np.hstack((b_ub, b_ub_x0))
+
+        case _:
+            raise ValueError(f"Unknown quota type: {quota}")
 
     con_kwargs |= {"A_ub": A_ub, "b_ub": b_ub}
     res = linprog(c=c, **con_kwargs, bounds=bounds, integrality=1)
@@ -504,20 +543,6 @@ def make_df(simulations: list[Simulation]) -> pd.DataFrame:
                 }
             rows.append(row)
     df = pd.DataFrame(rows)
-
-    # def add_util_perc(df: pd.DataFrame, col: str, group_cols: list) -> pd.Series:
-    #     none_util = (
-    #         df[df["quota"] == QuotaType.NONE.name]
-    #         .groupby(group_cols)[col]
-    #         .first()  # Take the first value for each group
-    #     )
-    #     none_util.loc[none_util == 0] = 1e-3  # Avoid division by zero
-
-    #     def compute_row(row):
-    #         key = tuple(row[group_cols])
-    #         return row[col] / none_util.get(key, float("nan"))
-
-    #     return df.apply(compute_row, axis=1)
     
     def add_util_perc(df: pd.DataFrame, col:str ) -> pd.DataFrame:
         mask = (df['quota'] == QuotaType.NONE.name) & (df['gender_bias'] == GenderBias.NONE.name)

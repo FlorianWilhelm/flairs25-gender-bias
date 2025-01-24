@@ -1,0 +1,241 @@
+\documentclass[letterpaper]{article}
+\usepackage{flairs}%aaai
+\usepackage{times}
+\usepackage{helvet}
+\usepackage{courier}
+\usepackage{amsmath}
+\usepackage{amsfonts}
+\usepackage{amssymb}
+\usepackage{amsthm}
+\usepackage{booktabs} 
+\usepackage{graphicx}
+\usepackage{todonotes}
+\frenchspacing
+\setlength{\pdfpagewidth}{8.5in}
+\setlength{\pdfpageheight}{11in}
+% Allow \citet style as also done in https://aaai.org/ocs/index.php/FLAIRS/FLAIRS20/paper/view/18398/17511
+\newcommand{\citet}[1]{\citeauthor{#1} (\citeyear{#1})}
+%% dashed rules for tables from https://www.latex4technics.com/?note=2BGI
+\newcommand{\dashrule}[1][black]{%
+  \color{#1}\rule[\dimexpr.5ex-.2pt]{4pt}{.4pt}\xleaders\hbox{\rule{4pt}{0pt}\rule[\dimexpr.5ex-.2pt]{4pt}{.4pt}}\hfill\kern0pt%
+}
+\pdfinfo{
+/Title (Modeling and Mitigating Gender Bias in Allocation Problems: A Simulation-Based Approach with Quota Constraints)
+/Author (Anonymous)}
+\setcounter{secnumdepth}{0}  
+ \begin{document}
+% This file is an adoption of the style file for AAAI Press 
+% proceedings, working notes, and technical reports.  This file is made 
+% with minimal changes by explicit permission from AAAI.
+\title{Modeling and Mitigating Gender Bias in Allocation Problems: A~Simulation-Based Approach with Quota Constraints}
+\author{Author 1\\
+Affiliation 1\\
+Address Line 1.1\\
+Address Line 1.2\\
+\And Author 2\\
+Affiliation 2\\
+Address Line 2.1\\
+Address Line 2.2\\
+}
+
+% Add data generating process, explain it
+% mention that job capacities don't really change a thing.
+
+\maketitle
+\begin{abstract}
+\begin{quote}
+In high-stakes decision-making processes, such as job allocation and resource distribution, ensuring fairness while maintaining efficiency is a persistent challenge. This paper presents a simulation-based framework to analyze the impact of gender bias and quota mechanisms in allocation problems. We introduce a generative model where individual preferences, influenced by gender-specific priors, are sampled from Dirichlet distributions, with the divergence between male and female preferences quantified using the Total Variation Distance (TVD). Capacities for positions are assigned using a modified stick-breaking process, ensuring even capacities that sum exactly to the total available capacity. Discrimination is modeled through bias penalties, and fairness interventions are evaluated via various quota constraints. We systematically examine how different levels of bias and quotas affect allocation efficiency and group-specific outcomes. This framework offers a controlled environment for studying the trade-offs between fairness and efficiency in biased decision-making scenarios.
+\end{quote}
+\end{abstract}
+
+\section{Introduction}
+Artificial intelligence (AI) systems are increasingly deployed in high-stakes decision-making domains such as hiring, resource allocation, and workforce management. These systems must balance competing objectives, notably efficiency and fairness. Fairness, as an ethical principle, is inherently broad and complex and may never be fully realizable, as suggested by \citet{Peterson_Hamrouni_2022}. However, specific aspects of fairness are legally mandated through regulations such as anti-discrimination laws. The Universal Declaration of Human Rights \cite{udhr1948} explicitly prohibits discrimination based on attributes such as race, color, gender, language, religion, political opinion, or social origin. While this declaration serves as a normative framework for assigning individuals to positions (e.g., jobs or roles), it remains extremely difficult to verify the absence of bias concerning legally protected attributes during the allocation process.
+
+A practical method to mitigate biases that lead to discrimination is the implementation of quotas, which are commonly used to address gender disparities. However, similar to the challenge of quantifying biases, evaluating the effectiveness of quotas in mitigating discrimination is equally difficult due to their counterfactual nature. In this work, we propose a simplified model to simulate the impact of biases and quotas in an allocation problem where individuals are assigned to positions with specific capacities. Our focus is on the gender attribute, assuming a binary gender system (male and female), while acknowledging the broader complexities and nuances of gender beyond this simplified framework.
+
+Beyond gender, individuals are further characterized by their preference distribution over a set of positions. We assume that an individual's preference directly reflects their ability to perform a given position effectively, following the Interest-Ability Hypothesis \cite{jintelligence10030043}. Accordingly, we define the efficiency of an allocation as the total sum of individual preferences satisfied by their assigned positions.
+
+By using this simplified model, we demonstrate how quotas can mitigate the negative impact of gender bias on the efficiency of an allocation. Furthermore, we analyze how the prior distribution of gender-based preferences—and the differences between gender groups—affect the outcomes of quota implementations.
+
+\section{Mathematical Model}
+
+Let \( S = \{s_1, \ldots, s_n\} \) be the set of individuals and \( G = \{f, m\} \) the binary set of genders, where \( f \) denotes female and \( m \) denotes male. The set of available positions is \( O = \{o_1, \ldots, o_m\} \), and we introduce the \textit{outside option} \( \emptyset \) to represent the state where an individual remains unmatched. Each position \( o_j \in O \) has a capacity \( c_j = c(o_j) \in \mathbb{N} \), and each individual \( s_i \in S \) is assigned a gender \( g_i = g(s_i) \in G \).
+
+A matching is a function \( \mu : S \to O \cup \{\emptyset\} \) that satisfies:
+\begin{enumerate}
+    \item \( \mu(s) \in O \cup \{\emptyset\} \) for all \( s \in S \),
+    \item  \( |\mu^{-1}(o)| \leq c(o) \) for all \( o \in O \), where \( \mu^{-1}(o) = \{ s \in S \mid \mu(s) = o \} \),
+    \item \( \mu(s) = o \iff s \in \mu^{-1}(o) \) for all \( s \in S \) and \( o \in O \).
+\end{enumerate}
+
+The outside option \( \emptyset \) represents the scenario where an individual \( s \in S \) is unmatched, i.e., \( \mu(s) = \emptyset \).
+
+Each individual \( s_i \) has a preference function \( U_i : O \to [0, 1] \) reflecting how much they prefer each position, with \( \sum_{o_j \in O} U_i(o_j) = 1 \). In line with the \textit{Interest-Ability Hypothesis}~\cite{jintelligence10030043}, preferences are assumed to directly correspond to an individual's ability to perform in a given position.
+
+To quantify the difference between the preference distributions of two individuals \( s_i \) and \( s_k \), we use the \textit{Total Variation Distance} (TVD), defined as:
+\begin{equation}
+\text{TVD}(U_i, U_k) = \frac{1}{2} \sum_{o_j \in O} \left| U_i(o_j) - U_k(o_j) \right|.
+\end{equation}
+TVD measures the dissimilarity between two preference vectors, ranging from 0 (identical preferences) to 1 (completely disjoint preferences). This metric allows us to assess how individual or group preferences differ, particularly across genders.
+
+\subsection*{Efficiency and Integer Linear Programming}
+
+The \textit{efficiency} of a matching \( \mu \) is defined as the total sum of satisfied preferences:
+\[
+\eta(\mu) = \sum_{s_i \in S, \mu(s_i) \neq \emptyset} U_i(\mu(s_i)).
+\]
+Similarly, the efficiency of a matching for females and males is denoted as \( \eta_f(\mu) \) and \( \eta_m(\mu) \), respectively.
+
+To model discrimination, we introduce a \textit{bias adjustment} \( \beta \geq 0 \) that favors males by increasing their effective preferences. The \textit{biased preference function} is defined as:
+\begin{equation}
+\tilde{U}_i(o_j) = U_i(o_j) + \beta \cdot \delta_m(s_i),
+\end{equation}
+where \( \delta_m(s_i) = 1 \) if \( g(s_i) = m \) and \( 0 \) otherwise. This adjustment increases the effective preferences (and assumed skill) of males relative to females in the matching process, ensuring that \( \tilde{U}_i(o_j) \) remains non-negative.
+
+
+Under the \textit{Steady-State Optimality Assumption}, we assume the system reaches a stable and optimal allocation with respect to \( \tilde{U} \). Consecutively, the matching \( \mu \) is obtained by solving the following Integer Linear Program (ILP):
+\begin{align}
+\max_{x} \quad & \sum_{i \in S} \sum_{j \in O} \tilde{U}_i(o_j) \cdot x_{ij} \\
+\text{s.t.} \quad & \sum_{j \in O} x_{ij} \leq 1 \quad \forall i \in S, \\
+& \sum_{i \in S} x_{ij} \leq c_j \quad \forall j \in O, \\
+& x_{ij} \in \{0, 1\} \quad \forall i \in S, \forall j \in O.
+\end{align}
+Here, \( x_{ij} = 1 \) if individual \( s_i \) is assigned to position \( o_j \), and \( 0 \) otherwise. If \( \sum_{j \in O} x_{ij} = 0 \), individual \( s_i \) remains unmatched. While the matching \( \mu \) is computed using the biased preferences \( \tilde{U}_i \), the allocation efficiency is still evaluated using the unbiased preferences \( U_i \).
+
+\subsection*{Data Generating Process}
+
+To simulate the allocation problem, we generate data for a fixed number of individuals \( |S| = n \), a set of positions \( |O| = m \), and a total capacity \( C \) distributed across positions. The data generation proceeds as follows:
+
+\begin{enumerate}
+    \item \textbf{Generate Gender Distribution:}  
+    Assign each individual \( s_i \in S \) a gender \( g_i \in G = \{f, m\} \) with equal probability:
+    \[
+    P(g_i = f) = P(g_i = m) = 0.5.
+    \]
+
+    \item \textbf{Sample Gender-Specific Preference Priors:}  
+    For each gender \( g \in G \), draw a Dirichlet-distributed prior over positions to model gender-specific preferences:
+    \[
+    \boldsymbol{\alpha}^{(g)} \sim \text{Gamma}(\alpha_\text{prefs}, 1).
+    \]
+    This prior controls the concentration and variability of preferences for each gender.
+
+    \item \textbf{Generate Individual Preferences:}  
+    Each individual \( s_i \) samples their preference vector \( U_i \) from the Dirichlet distribution corresponding to their gender:
+    \[
+    U_i \sim \text{Dirichlet}(\boldsymbol{\alpha}^{(g_i)}).
+    \]
+    This reflects the assumption that gender influences position preferences.
+
+    \item \textbf{Control Preference Divergence via Expected TVD:}  
+    To control the divergence between male and female preference distributions, we compute the \textit{expected Total Variation Distance} (TVD) between gender-specific priors:
+    \[
+    \text{TVD}(\boldsymbol{\alpha}^{(f)}, \boldsymbol{\alpha}^{(m)}) = \frac{1}{2} \sum_{o_j \in O} \left| \frac{\alpha^{(f)}_j}{\sum_{k} \alpha^{(f)}_k} - \frac{\alpha^{(m)}_j}{\sum_{k} \alpha^{(m)}_k} \right|.
+    \]
+    By measuring and resampling, we approximate a target TVD, ensuring controlled divergence in preferences.
+
+    \item \textbf{Generate Position Capacities via Stick-Breaking Process:}  
+    The total capacity \( C \) is exactly distributed across positions using a modified \textit{stick-breaking process}. For each position \( o_j \in O \), draw:
+    \[
+    v_j \sim \text{Beta}(1, \alpha_\text{caps}),
+    \]
+    and define the raw capacity proportion as:
+    \[
+    \pi_j = v_j \prod_{k=1}^{j-1} (1 - v_k).
+    \]
+    Capacities are then scaled and rounded to ensure even values and exact allocation:
+    \[
+    c_j = 2 \cdot \left\lfloor \frac{\pi_j \cdot C}{2} \right\rfloor.
+    \]
+    Finally, any remaining capacity is evenly distributed to maintain \( \sum_{j=1}^m c_j = C \), ensuring all \( c_j \) are even.
+\end{enumerate}
+
+The generative process is governed by the preference concentration \( \alpha_\mathrm{prefs} \) and capacity concentration \( \alpha_\mathrm{caps} \). By controlling the target TVD through resampling, we model the divergence between male and female preferences. This framework enables controlled simulation of gender-specific preferences and capacity distributions, providing the foundation for analyzing biased allocation outcomes. A graphical representation of this process is shown in Figure~\ref{fig:plate_diagram}.
+
+
+
+\begin{figure}[ht]
+
+  \centering
+  \includegraphics[width=0.9\linewidth]{plate_diagram.pdf}
+\caption{Plate diagram of the data generation and allocation process. Gender assignments \( g_i \) are sampled from a balanced uniform distribution. For each gender, gender-specific preference priors \( \mathbf{\alpha}^{(g)} \) are sampled from a Gamma distribution with parameter \( \alpha_\mathrm{prefs} \), and preferences \( \mathbf{U}_i \) are drawn from the corresponding Dirichlet prior. A gender bias \( \beta \) is applied to the preferences of male individuals to favor males over females, resulting in biased preferences \( \tilde{\mathbf{U}}_i \). The allocation \( \mathbf{x}_{ij} \) is determined by solving an ILP that maximizes \( \tilde{\mathbf{U}}_i \) under capacity constraints \( c_j \), generated via stick-breaking with \( \alpha_\mathrm{caps} \), \( v_j \), and \( \pi_j \). Final efficiency \( \eta \) is evaluated using the unbiased preferences \( \mathbf{U}_i \). Variables that can be observed in reality are indicated by shaded nodes. Plates represent the number of individuals \( |S| \) and positions \( |O| \).}
+
+  \label{fig:plate_diagram}
+\end{figure}
+
+\section{Evaluation}
+
+We evaluated the impact of gender bias and quota mechanisms on allocation efficiency by systematically combining different levels of discrimination, modeled through a bias adjustment \( \beta \), and quota policies enforcing female representation. Quotas were implemented as linear constraints ensuring female proportions met or exceeded \( q \), with a special case for gender parity (50\%) requiring exact balance.
+
+In anticipation of the results with respect to quotas and varying degrees of TVD, we propose and evaluate a novel preference-based quota system.
+
+To derive the preference-based quota, we consider the scenario where the true, unbiased preferences \( U \) are not known. Instead, individuals are asked to vote for their single highest preference among the positions. These votes are aggregated separately for females and males to approximate the expectation values of their respective preference priors, \( \mathbb{E}[\textrm{Dirichlet}(\alpha^{(g)})] \) for \( g\in\{f, m\} \). Specifically, the aggregated votes provide empirical estimates of the preference weights for each position, which are then normalized to define the expected preference distribution for each gender.
+
+\[
+\hat{\alpha}^{(g)}_j = \frac{\text{Votes for position } o_j \text{ from gender } g}{\text{Total votes from gender } g}.
+\]
+
+From these estimated preference distributions, we define an optimal quota for each position. For position \( o_j \), the preference-based quota for genders \( g\in\{f, m\} \) is computed as:
+
+\[
+q_j^{(g)} = \frac{\hat{\alpha}^{(g)}_j}{\hat{\alpha}^{(f)}_j + \hat{\alpha}^{(m)}_j},
+\]
+
+These quotas ensure that the allocation proportions for each position align with the observed gender-specific preferences, effectively mitigating bias and promoting efficiency by reflecting the actual interests of the groups.
+
+To account for preference divergence, we tracked the Total Variation Distance (TVD) between gender-specific preferences, allowing us to analyze its influence on outcomes. 
+
+For our simulation experiments, we performed 100 test runs each with \( \alpha_\text{prefs} = 1 \) (preference concentration) and \( \alpha_\text{caps} = 5 \) (capacity distribution) for 5 and 10 positions with a total capacity of 100. In each run, a dataset with 250 individuals was generated, including two gender priors with corresponding TVD and individual preferences. For the given number of positions and total capacity, position capacities were generated using the specified parameters. The matching \( \mu \) was then determined for various biases and quotas, which was used to calculate the total and gender-specific efficiencies. To ensure comparability, all efficiencies were normalized by dividing through the baseline case of \( \beta = 0 \) and \( q = 0 \). Results highlight the interplay of bias, quotas, TVD, and efficiency in allocation scenarios.
+
+
+\section{Results}
+
+In Figure~\ref{fig:scatter_plot}, the scatter plots with robust regression lines for a gender bias \( \beta = 0.2 \) and 5 positions show the relationship between TVD and efficiency outcomes. Without quotas, i.e., \( q=0 \), higher TVD results in reduced group-specific and overall utility. Introducing quotas (e.g., \( q\geq 20 \), \( q\geq 40 \)) mitigates the disparity, with \( q = 50 \) ensuring balanced group outcomes but at a cost to total efficiency.
+
+Figure~\ref{fig:violin_plot} illustrates the effect of quotas and TVD on total utility and group-specific outcomes for 10 positions and a bias \( \beta = 0.3 \). Under the assumption of high similarity (\( \text{TVD} \leq 0.2 \)), quotas help to increase overall efficiency across all levels. However, in cases of low similarity (\( \text{TVD} \geq 0.8 \)), higher quotas (e.g., \( q \geq 40 \)) worsen total efficiency due to stricter constraints on allocations.
+
+The results highlight two key findings:
+1. Preference similarity (low TVD) enhances efficiency, emphasizing the role of aligning preferences to improve outcomes.
+2. Quotas can effectively address gender disparities, but higher levels (e.g., \( q = 50 \)) may trade off some efficiency for fairness, particularly under low similarity conditions.
+
+This analysis demonstrates the framework's utility in exploring trade-offs between fairness and efficiency under varying conditions of bias and preference divergence.
+
+\begin{figure}[ht]
+
+  \centering
+  \includegraphics[width=1.0\linewidth]{scatter_plot.pdf}
+\caption{positions = 5, persons=250, total cap =100, gender bias = 0.2. Mention robust regression with Theil-Sen.}
+
+  \label{fig:scatter_plot}
+\end{figure}
+
+\begin{figure}[ht]
+
+  \centering
+  \includegraphics[width=1.0\linewidth]{violin_plot.pdf}
+\caption{positions = 5, persons=250, total cap =100, gender bias = 0.3, high similarity is tvd smaller 0.2, low is tvd larger 0.8 }
+
+  \label{fig:violin_plot}
+\end{figure}
+
+
+
+\section{Related Work}
+
+\todo[inline]{Needs to be done.}
+
+\section{Conclusion}
+\todo[inline]{Rework}
+This paper provides a mathematical framework to analyze the impact of gender-based job allocation constraints. We demonstrated that while gender quotas can enforce aggregate fairness, they may reduce societal satisfaction and fail to guarantee true non-discrimination. By incorporating insights from the nature versus nurture debate, we highlight the importance of addressing underlying preference disparities to achieve fairness. Future work could explore extensions of this model to include more nuanced representations of gender and preferences, as well as dynamic allocation scenarios.
+
+\bigskip
+\bibliographystyle{flairs}
+\bibliography{refs}
+
+\end{document}
+
+\cite{lin_why_2017} 
+\bigskip
+\bibliographystyle{flairs}
+\bibliography{refs}
+\end{document}

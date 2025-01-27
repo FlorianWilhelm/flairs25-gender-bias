@@ -1,0 +1,895 @@
+@inproceedings{rendle_neural_2020,
+author = {Rendle, Steffen and Krichene, Walid and Zhang, Li and Anderson, John},
+title = {Neural Collaborative Filtering vs. Matrix Factorization Revisited},
+year = {2020},
+isbn = {9781450375832},
+publisher = {Association for Computing Machinery},
+address = {New York, NY, USA},
+url = {https://doi.org/10.1145/3383313.3412488},
+doi = {10.1145/3383313.3412488},
+abstract = { Embedding based models have been the state of the art in collaborative filtering for over a decade. Traditionally, the dot product or higher order equivalents have been used to combine two or more embeddings, e.g., most notably in matrix factorization. In recent years, it was suggested to replace the dot product with a learned similarity e.g. using a multilayer perceptron (MLP). This approach is often referred to as neural collaborative filtering (NCF). In this work, we revisit the experiments of the NCF paper that popularized learned similarities using MLPs. First, we show that with a proper hyperparameter selection, a simple dot product substantially outperforms the proposed learned similarities. Second, while a MLP can in theory approximate any function, we show that it is non-trivial to learn a dot product with an MLP. Finally, we discuss practical issues that arise when applying MLP based similarities and show that MLPs are too costly to use for item recommendation in production environments while dot products allow to apply very efficient retrieval algorithms. We conclude that MLPs should be used with care as embedding combiner and that dot products might be a better default choice.},
+booktitle = {Fourteenth ACM Conference on Recommender Systems},
+pages = {240–248},
+numpages = {9},
+keywords = {Neural Collaborative Filtering, Matrix Factorization, Item Recommendation},
+location = {Virtual Event, Brazil},
+series = {RecSys '20}
+}
+
+
+@incollection{ricci_advances_2011,
+author="Koren, Yehuda
+and Bell, Robert",
+editor="Ricci, Francesco
+and Rokach, Lior
+and Shapira, Bracha",
+title="Advances in Collaborative Filtering",
+bookTitle="Recommender Systems Handbook",
+year="2015",
+publisher="Springer US",
+address="Boston, MA",
+pages="77--118",
+abstract="The collaborative filtering (CF) approach to recommenders has recently enjoyed much interest and progress. The fact that it played a central role within the recently completed Netflix competition has contributed to its popularity. This chapter surveys the recent progress in the field. Matrix factorization techniques, which became a first choice for implementing CF, are described together with recent innovations. We also describe several extensions that bring competitive accuracy into neighborhood methods, which used to dominate the field. The chapter demonstrates how to utilize temporal models and implicit feedback to extend models accuracy. In passing, we include detailed descriptions of some the central methods developed for tackling the challenge of the Netflix Prize competition.",
+isbn="978-1-4899-7637-6",
+doi="10.1007/978-1-4899-7637-6_3",
+url="https://doi.org/10.1007/978-1-4899-7637-6_3"
+}
+
+
+@article{paterek_improving_2007,
+	title = {Improving regularized singular value decomposition for collaborative filtering},
+	volume = {vol. 2007},
+	abstract = {A key part of a recommender system is a collaborative filtering algorithm predicting users’ preferences for items. In this paper we describe diﬀerent eﬃcient collaborative filtering techniques and a framework for combining them to obtain a good prediction.},
+	language = {en},
+	journal = {Proceedings of KDD cup and workshop},
+	author = {Paterek, Arkadiusz},
+	year = {2007},
+	pages = {pp. 5--8},
+	file = {Paterek - Improving regularized singular value decomposition.pdf:/Users/fwilhelm/Zotero/storage/BDDYG8Y7/Paterek - Improving regularized singular value decomposition.pdf:application/pdf}
+}
+
+@inproceedings{geng_learning_2015,
+	address = {Santiago, Chile},
+	title = {Learning {Image} and {User} {Features} for {Recommendation} in {Social} {Networks}},
+	isbn = {978-1-4673-8391-2},
+	url = {http://ieeexplore.ieee.org/document/7410843/},
+	doi = {10.1109/ICCV.2015.486},
+	abstract = {Good representations of data do help in many machine learning tasks such as recommendation. It is often a great challenge for traditional recommender systems to learn representative features of both users and images in large social networks, in particular, social curation networks, which are characterized as the extremely sparse links between users and images, and the extremely diverse visual contents of images. To address the challenges, we propose a novel deep model which learns the unified feature representations for both users and images. This is done by transforming the heterogeneous user-image networks into homogeneous low-dimensional representations, which facilitate a recommender to trivially recommend images to users by feature similarity. We also develop a fast online algorithm that can be easily scaled up to large networks in an asynchronously parallel way. We conduct extensive experiments on a representative subset of Pinterest, containing 1,456,540 images and 1,000,000 users. Results of image recommendation experiments demonstrate that our feature learning approach significantly outperforms other state-of-the-art recommendation methods.},
+	language = {en},
+	urldate = {2021-03-19},
+	booktitle = {2015 {IEEE} {International} {Conference} on {Computer} {Vision} ({ICCV})},
+	publisher = {IEEE},
+	author = {Geng, Xue and Zhang, Hanwang and Bian, Jingwen and Chua, Tat-Seng},
+	month = dec,
+	year = {2015},
+	pages = {4274--4282},
+	file = {Geng et al. - 2015 - Learning Image and User Features for Recommendatio.pdf:/Users/fwilhelm/Zotero/storage/V4EQRXKM/Geng et al. - 2015 - Learning Image and User Features for Recommendatio.pdf:application/pdf}
+}
+
+@article{harper_movielens_2016,
+	title = {The {MovieLens} {Datasets}: {History} and {Context}},
+	volume = {5},
+	issn = {2160-6455, 2160-6463},
+	shorttitle = {The {MovieLens} {Datasets}},
+	url = {https://dl.acm.org/doi/10.1145/2827872},
+	doi = {10.1145/2827872},
+	abstract = {The MovieLens datasets are widely used in education, research, and industry. They are downloaded hundreds of thousands of times each year, reflecting their use in popular press programming books, traditional and online courses, and software. These datasets are a product of member activity in the MovieLens movie recommendation system, an active research platform that has hosted many experiments since its launch in 1997. This article documents the history of MovieLens and the MovieLens datasets. We include a discussion of lessons learned from running a long-standing, live research platform from the perspective of a research organization. We document best practices and limitations of using the MovieLens datasets in new research.},
+	language = {en},
+	number = {4},
+	urldate = {2021-03-19},
+	journal = {ACM Transactions on Interactive Intelligent Systems},
+	author = {Harper, F. Maxwell and Konstan, Joseph A.},
+	month = jan,
+	year = {2016},
+	pages = {1--19},
+	file = {Harper and Konstan - 2016 - The MovieLens Datasets History and Context.pdf:/Users/fwilhelm/Zotero/storage/Q8GKU7RM/Harper and Konstan - 2016 - The MovieLens Datasets History and Context.pdf:application/pdf}
+}
+
+@article{kula_mixture--tastes_2018,
+	title = {Mixture-of-tastes {Models} for {Representing} {Users} with {Diverse} {Interests}},
+	url = {http://arxiv.org/abs/1711.08379},
+	abstract = {Most existing recommendation approaches implicitly treat user tastes as unimodal, resulting in an average-of-tastes representation when multiple distinct interests are present. We show that appropriately modelling the multi-faceted nature of user tastes through a mixture-of-tastes model leads to large increases in recommendation quality. Our result holds both for deep sequence-based and traditional factorization models, and is robust to careful selection and tuning of baseline models. In sequence-based models, this improvement is achieved at a very modest cost in model complexity, making mixture-of-tastes models a straightforward improvement upon existing baselines.},
+	language = {en},
+	urldate = {2021-03-19},
+	journal = {arXiv:1711.08379 [cs]},
+	author = {Kula, Maciej},
+	month = jan,
+	year = {2018},
+	note = {arXiv: 1711.08379},
+	keywords = {Computer Science - Information Retrieval},
+	file = {Kula - 2018 - Mixture-of-tastes Models for Representing Users wi.pdf:/Users/fwilhelm/Zotero/storage/R98AJ8UV/Kula - 2018 - Mixture-of-tastes Models for Representing Users wi.pdf:application/pdf}
+}
+
+@article{koren_bellkor_2009,
+  title={The bellkor solution to the netflix grand prize},
+  author={Koren, Yehuda},
+  journal={Netflix prize documentation},
+  volume={81},
+  number={2009},
+  pages={1--10},
+  year={2009}
+}
+
+@article{leskovec_dynamics_2007,
+	title = {The dynamics of viral marketing},
+	volume = {1},
+	issn = {1559-1131, 1559-114X},
+	url = {https://dl.acm.org/doi/10.1145/1232722.1232727},
+	doi = {10.1145/1232722.1232727},
+	abstract = {We present an analysis of a person-to-person recommendation network, consisting of 4 million people who made 16 million recommendations on half a million products. We observe the propagation of recommendations and the cascade sizes, which we explain by a simple stochastic model. We analyze how user behavior varies within user communities defined by a recommendation network. Product purchases follow a ‘long tail’ where a significant share of purchases belongs to rarely sold items. We establish how the recommendation network grows over time and how effective it is from the viewpoint of the sender and receiver of the recommendations. While on average recommendations are not very effective at inducing purchases and do not spread very far, we present a model that successfully identifies communities, product, and pricing categories for which viral marketing seems to be very effective.},
+	language = {en},
+	number = {1},
+	urldate = {2021-03-19},
+	journal = {ACM Transactions on the Web},
+	author = {Leskovec, Jure and Adamic, Lada A. and Huberman, Bernardo A.},
+	month = may,
+	year = {2007},
+	pages = {5},
+	file = {Leskovec et al. - 2007 - The dynamics of viral marketing.pdf:/Users/fwilhelm/Zotero/storage/6M572HNI/Leskovec et al. - 2007 - The dynamics of viral marketing.pdf:application/pdf}
+}
+
+@article{dhanjal_auc_2015,
+	title = {{AUC} {Optimisation} and {Collaborative} {Filtering}},
+	url = {http://arxiv.org/abs/1508.06091},
+	abstract = {In recommendation systems, one is interested in the ranking of the predicted items as opposed to other losses such as the mean squared error. Although a variety of ways to evaluate rankings exist in the literature, here we focus on the Area Under the ROC Curve (AUC) as it widely used and has a strong theoretical underpinning. In practical recommendation, only items at the top of the ranked list are presented to the users. With this in mind, we propose a class of objective functions over matrix factorisations which primarily represent a smooth surrogate for the real AUC, and in a special case we show how to prioritise the top of the list. The objectives are diﬀerentiable and optimised through a carefully designed stochastic gradientdescent-based algorithm which scales linearly with the size of the data. In the special case of square loss we show how to improve computational complexity by leveraging previously computed measures. To understand theoretically the underlying matrix factorisation approaches we study both the consistency of the loss functions with respect to AUC, and generalisation using Rademacher theory. The resulting generalisation analysis gives strong motivation for the optimisation under study. Finally, we provide computation results as to the eﬃcacy of the proposed method using synthetic and real data.},
+	language = {en},
+	urldate = {2021-03-20},
+	journal = {arXiv:1508.06091 [cs, stat]},
+	author = {Dhanjal, Charanpal and Gaudel, Romaric and Clemencon, Stephan},
+	month = aug,
+	year = {2015},
+	note = {arXiv: 1508.06091},
+	keywords = {Computer Science - Machine Learning, Statistics - Machine Learning},
+	file = {Dhanjal et al. - 2015 - AUC Optimisation and Collaborative Filtering.pdf:/Users/fwilhelm/Zotero/storage/AC89LFQP/Dhanjal et al. - 2015 - AUC Optimisation and Collaborative Filtering.pdf:application/pdf}
+}
+
+@article{paun_comparing_2018,
+	title = {Comparing {Bayesian} {Models} of {Annotation}},
+	volume = {6},
+	issn = {2307-387X},
+	url = {https://direct.mit.edu/tacl/article/43448},
+	doi = {10.1162/tacl_a_00040},
+	abstract = {The analysis of crowdsourced annotations in natural language processing is concerned with identifying (1) gold standard labels, (2) annotator accuracies and biases, and (3) item difficulties and error patterns. Traditionally, majority voting was used for 1, and coefficients of agreement for 2 and 3. Lately, model-based analysis of corpus annotations have proven better at all three tasks. But there has been relatively little work comparing them on the same datasets. This paper aims to fill this gap by analyzing six models of annotation, covering different approaches to annotator ability, item difficulty, and parameter pooling (tying) across annotators and items. We evaluate these models along four aspects: comparison to gold labels, predictive accuracy for new annotations, annotator characterization, and item difficulty, using four datasets with varying degrees of noise in the form of random (spammy) annotators. We conclude with guidelines for model selection, application, and implementation.},
+	language = {en},
+	urldate = {2021-03-21},
+	journal = {Transactions of the Association for Computational Linguistics},
+	author = {Paun, Silviu and Carpenter, Bob and Chamberlain, Jon and Hovy, Dirk and Kruschwitz, Udo and Poesio, Massimo},
+	month = dec,
+	year = {2018},
+	pages = {571--585},
+	file = {Paun et al. - 2018 - Comparing Bayesian Models of Annotation.pdf:/Users/fwilhelm/Zotero/storage/QYDLU84N/Paun et al. - 2018 - Comparing Bayesian Models of Annotation.pdf:application/pdf}
+}
+
+@article{jankowiak_pathwise_2018,
+	title = {Pathwise {Derivatives} {Beyond} the {Reparameterization} {Trick}},
+	url = {http://arxiv.org/abs/1806.01851},
+	abstract = {We observe that gradients computed via the reparameterization trick are in direct correspondence with solutions of the transport equation in the formalism of optimal transport. We use this perspective to compute (approximate) pathwise gradients for probability distributions not directly amenable to the reparameterization trick: Gamma, Beta, and Dirichlet. We further observe that when the reparameterization trick is applied to the Choleskyfactorized multivariate Normal distribution, the resulting gradients are suboptimal in the sense of optimal transport. We derive the optimal gradients and show that they have reduced variance in a Gaussian Process regression task. We demonstrate with a variety of synthetic experiments and stochastic variational inference tasks that our pathwise gradients are competitive with other methods.},
+	language = {en},
+	urldate = {2021-03-21},
+	journal = {arXiv:1806.01851 [cs, stat]},
+	author = {Jankowiak, Martin and Obermeyer, Fritz},
+	month = jul,
+	year = {2018},
+	note = {arXiv: 1806.01851},
+	keywords = {Computer Science - Machine Learning, Statistics - Machine Learning},
+	file = {Jankowiak and Obermeyer - 2018 - Pathwise Derivatives Beyond the Reparameterization.pdf:/Users/fwilhelm/Zotero/storage/C4SNSZPV/Jankowiak and Obermeyer - 2018 - Pathwise Derivatives Beyond the Reparameterization.pdf:application/pdf}
+}
+
+@article{srivastava_autoencoding_2017,
+	title = {Autoencoding {Variational} {Inference} {For} {Topic} {Models}},
+	url = {http://arxiv.org/abs/1703.01488},
+	abstract = {Topic models are one of the most popular methods for learning representations of text, but a major challenge is that any change to the topic model requires mathematically deriving a new inference algorithm. A promising approach to address this problem is autoencoding variational Bayes (AEVB), but it has proven difficult to apply to topic models in practice. We present what is to our knowledge the first effective AEVB based inference method for latent Dirichlet allocation (LDA), which we call Autoencoded Variational Inference For Topic Model (AVITM). This model tackles the problems caused for AEVB by the Dirichlet prior and by component collapsing. We find that AVITM matches traditional methods in accuracy with much better inference time. Indeed, because of the inference network, we find that it is unnecessary to pay the computational cost of running variational optimization on test data. Because AVITM is black box, it is readily applied to new topic models. As a dramatic illustration of this, we present a new topic model called ProdLDA, that replaces the mixture model in LDA with a product of experts. By changing only one line of code from LDA, we find that ProdLDA yields much more interpretable topics, even if LDA is trained via collapsed Gibbs sampling.},
+	language = {en},
+	urldate = {2021-03-21},
+	journal = {arXiv:1703.01488 [stat]},
+	author = {Srivastava, Akash and Sutton, Charles},
+	month = mar,
+	year = {2017},
+	note = {arXiv: 1703.01488},
+	keywords = {Statistics - Machine Learning},
+	file = {Srivastava and Sutton - 2017 - Autoencoding Variational Inference For Topic Model.pdf:/Users/fwilhelm/Zotero/storage/CSDH3CGS/Srivastava and Sutton - 2017 - Autoencoding Variational Inference For Topic Model.pdf:application/pdf}
+}
+
+@article{bingham_pyro_2018,
+	title = {Pyro: {Deep} {Universal} {Probabilistic} {Programming}},
+	shorttitle = {Pyro},
+	url = {http://arxiv.org/abs/1810.09538},
+	abstract = {Pyro is a probabilistic programming language built on Python as a platform for developing advanced probabilistic models in AI research. To scale to large datasets and high-dimensional models, Pyro uses stochastic variational inference algorithms and probability distributions built on top of PyTorch, a modern GPU-accelerated deep learning framework. To accommodate complex or model-specific algorithmic behavior, Pyro leverages Poutine, a library of composable building blocks for modifying the behavior of probabilistic programs.},
+	language = {en},
+	urldate = {2021-03-21},
+	journal = {arXiv:1810.09538 [cs, stat]},
+	author = {Bingham, Eli and Chen, Jonathan P. and Jankowiak, Martin and Obermeyer, Fritz and Pradhan, Neeraj and Karaletsos, Theofanis and Singh, Rohit and Szerlip, Paul and Horsfall, Paul and Goodman, Noah D.},
+	month = oct,
+	year = {2018},
+	note = {arXiv: 1810.09538},
+	keywords = {Computer Science - Machine Learning, Computer Science - Programming Languages, Statistics - Machine Learning},
+	file = {Bingham et al. - 2018 - Pyro Deep Universal Probabilistic Programming.pdf:/Users/fwilhelm/Zotero/storage/YNM7TIZ9/Bingham et al. - 2018 - Pyro Deep Universal Probabilistic Programming.pdf:application/pdf}
+}
+
+@article{rendle_bpr_2009,
+	title = {{BPR}: {Bayesian} {Personalized} {Ranking} from {Implicit} {Feedback}},
+	abstract = {Item recommendation is the task of predicting a personalized ranking on a set of items (e.g. websites, movies, products). In this paper, we investigate the most common scenario with implicit feedback (e.g. clicks, purchases). There are many methods for item recommendation from implicit feedback like matrix factorization (MF) or adaptive knearest-neighbor (kNN). Even though these methods are designed for the item prediction task of personalized ranking, none of them is directly optimized for ranking. In this paper we present a generic optimization criterion BPR-Opt for personalized ranking that is the maximum posterior estimator derived from a Bayesian analysis of the problem. We also provide a generic learning algorithm for optimizing models with respect to BPR-Opt. The learning method is based on stochastic gradient descent with bootstrap sampling. We show how to apply our method to two state-of-the-art recommender models: matrix factorization and adaptive kNN. Our experiments indicate that for the task of personalized ranking our optimization method outperforms the standard learning techniques for MF and kNN. The results show the importance of optimizing models for the right criterion.},
+	language = {en},
+	author = {Rendle, Steffen and Freudenthaler, Christoph and Gantner, Zeno and Schmidt-Thieme, Lars},
+	year = {2009},
+	month = {01},
+	pages = {452-461},
+	file = {Rendle et al. - 2009 - BPR Bayesian Personalized Ranking from Implicit F.pdf:/Users/fwilhelm/Zotero/storage/4KMDMDTT/Rendle et al. - 2009 - BPR Bayesian Personalized Ranking from Implicit F.pdf:application/pdf}
+}
+
+@article{xie_probabilistic_2014,
+	title = {A {Probabilistic} {Recommendation} {Method} {Inspired} by {Latent} {Dirichlet} {Allocation} {Model}},
+	volume = {2014},
+	issn = {1024-123X, 1563-5147},
+	url = {http://www.hindawi.com/journals/mpe/2014/979147/},
+	doi = {10.1155/2014/979147},
+	abstract = {The recent decade has witnessed an increasing popularity of recommendation systems, which help users acquire relevant knowledge, commodities, and services from an overwhelming information ocean on the Internet. Latent Dirichlet Allocation (LDA), originally presented as a graphical model for text topic discovery, now has found its application in many other disciplines. In this paper, we propose an LDA-inspired probabilistic recommendation method by taking the user-item collecting behavior as a two-step process: every user first becomes a member of one latent user-group at a certain probability and each user-group will then collect various items with different probabilities. Gibbs sampling is employed to approximate all the probabilities in the two-step process. The experiment results on three real-world data sets MovieLens, Netflix, and Last.fm show that our method exhibits a competitive performance on precision, coverage, and diversity in comparison with the other four typical recommendation methods. Moreover, we present an approximate strategy to reduce the computing complexity of our method with a slight degradation of the performance.},
+	language = {en},
+	urldate = {2021-03-23},
+	journal = {Mathematical Problems in Engineering},
+	author = {Xie, WenBo and Dong, Qiang and Gao, Hui},
+	year = {2014},
+	pages = {1--10},
+	file = {Xie et al. - 2014 - A Probabilistic Recommendation Method Inspired by .pdf:/Users/fwilhelm/Zotero/storage/36E4YVUL/Xie et al. - 2014 - A Probabilistic Recommendation Method Inspired by .pdf:application/pdf}
+}
+
+@article{blei_latent_2003,
+	title = {Latent {Dirichlet} {Allocation}},
+	abstract = {We describe latent Dirichlet allocation (LDA), a generative probabilistic model for collections of discrete data such as text corpora. LDA is a three-level hierarchical Bayesian model, in which each item of a collection is modeled as a finite mixture over an underlying set of topics. Each topic is, in turn, modeled as an infinite mixture over an underlying set of topic probabilities. In the context of text modeling, the topic probabilities provide an explicit representation of a document. We present efficient approximate inference techniques based on variational methods and an EM algorithm for empirical Bayes parameter estimation. We report results in document modeling, text classification, and collaborative filtering, comparing to a mixture of unigrams model and the probabilistic LSI model.},
+	date = {January 2003},
+	year = {2003},
+	language = {en},
+	editor = {Lafferty, John},
+	author = {Blei, David M. and Ng, Andres Y. and Jordan, Michael I.},
+	journal = {Journal of Machine Learning Research},
+	volume = {3},
+	issue = {4-5},
+	pages = {pp. 993-1022},
+	file = {Blei - Latent Dirichlet Allocation.pdf:/Users/fwilhelm/Zotero/storage/J9ZXZUEC/Blei - Latent Dirichlet Allocation.pdf:application/pdf}
+}
+
+@misc{paszke2019pytorch,
+      title={PyTorch: An Imperative Style, High-Performance Deep Learning Library}, 
+      author={Adam Paszke and Sam Gross and Francisco Massa and Adam Lerer and James Bradbury and Gregory Chanan and Trevor Killeen and Zeming Lin and Natalia Gimelshein and Luca Antiga and Alban Desmaison and Andreas Köpf and Edward Yang and Zach DeVito and Martin Raison and Alykhan Tejani and Sasank Chilamkurthy and Benoit Steiner and Lu Fang and Junjie Bai and Soumith Chintala},
+      year={2019},
+      eprint={1912.01703},
+      archivePrefix={arXiv},
+      primaryClass={cs.LG}
+}
+
+@inproceedings{zhang_learning_2006,
+	title = {Learning from {Incomplete} {Ratings} {Using} {Non}-negative {Matrix} {Factorization}},
+	isbn = {978-0-89871-611-5 978-1-61197-276-4},
+	url = {https://epubs.siam.org/doi/10.1137/1.9781611972764.58},
+	doi = {10.1137/1.9781611972764.58},
+	abstract = {We use a low-dimensional linear model to describe the user rating matrix in a recommendation system. A non-negativity constraint is enforced in the linear model to ensure that each user’s rating profile can be represented as an additive linear combination of canonical coordinates. In order to learn such a constrained linear model from an incomplete rating matrix, we introduce two variations on Non-negative Matrix Factorization (NMF): one based on the Expectation-Maximization (EM) procedure and the other a Weighted Nonnegative Matrix Factorization (WNMF). Based on our experiments, the EM procedure converges well empirically and is less susceptible to the initial starting conditions than WNMF, but the latter is much more computationally eﬃcient. Taking into account the advantages of both algorithms, a hybrid approach is presented and shown to be effective in real data sets. Overall, the NMF-based algorithms obtain the best prediction performance compared with other popular collaborative filtering algorithms in our experiments; the resulting linear models also contain useful patterns and features corresponding to user communities.},
+	language = {en},
+	urldate = {2021-03-27},
+	booktitle = {Proceedings of the 2006 {SIAM} {International} {Conference} on {Data} {Mining}},
+	publisher = {Society for Industrial and Applied Mathematics},
+	author = {Zhang, Sheng and Wang, Weihong and Ford, James and Makedon, Fillia},
+	month = apr,
+	year = {2006},
+	pages = {549--553},
+	file = {Zhang et al. - 2006 - Learning from Incomplete Ratings Using Non-negativ.pdf:/Users/fwilhelm/Zotero/storage/VGG3G6VH/Zhang et al. - 2006 - Learning from Incomplete Ratings Using Non-negativ.pdf:application/pdf}
+}
+
+@article{koren_factorization_nodate,
+	title = {Factorization {Meets} the {Neighborhood}: a {Multifaceted} {Collaborative} {Filtering} {Model}},
+	abstract = {Recommender systems provide users with personalized suggestions for products or services. These systems often rely on Collaborating Filtering (CF), where past transactions are analyzed in order to establish connections between users and products. The two more successful approaches to CF are latent factor models, which directly profile both users and products, and neighborhood models, which analyze similarities between products or users. In this work we introduce some innovations to both approaches. The factor and neighborhood models can now be smoothly merged, thereby building a more accurate combined model. Further accuracy improvements are achieved by extending the models to exploit both explicit and implicit feedback by the users. The methods are tested on the Netﬂix data. Results are better than those previously published on that dataset. In addition, we suggest a new evaluation metric, which highlights the differences among methods, based on their performance at a top-K recommendation task.},
+	language = {en},
+	author = {Koren, Yehuda},
+	pages = {9},
+	file = {Koren - Factorization Meets the Neighborhood a Multifacet.pdf:/Users/fwilhelm/Zotero/storage/AJKENBZI/Koren - Factorization Meets the Neighborhood a Multifacet.pdf:application/pdf}
+}
+
+@article{lee_comparative_2012,
+	title = {A {Comparative} {Study} of {Collaborative} {Filtering} {Algorithms}},
+	url = {http://arxiv.org/abs/1205.3193},
+	abstract = {Collaborative filtering is a rapidly advancing research area. Every year several new techniques are proposed and yet it is not clear which of the techniques work best and under what conditions. In this paper we conduct a study comparing several collaborative filtering techniques – both classic and recent state-of-the-art – in a variety of experimental contexts. Specifically, we report conclusions controlling for number of items, number of users, sparsity level, performance criteria, and computational complexity. Our conclusions identify what algorithms work well and in what conditions, and contribute to both industrial deployment collaborative filtering algorithms and to the research community.},
+	language = {en},
+	urldate = {2021-03-27},
+	journal = {arXiv:1205.3193 [cs, stat]},
+	author = {Lee, Joonseok and Sun, Mingxuan and Lebanon, Guy},
+	month = may,
+	year = {2012},
+	note = {arXiv: 1205.3193},
+	keywords = {Computer Science - Information Retrieval, H.2.8, I.2.6, Statistics - Machine Learning},
+	file = {Lee et al. - 2012 - A Comparative Study of Collaborative Filtering Alg.pdf:/Users/fwilhelm/Zotero/storage/4TCVAHY3/Lee et al. - 2012 - A Comparative Study of Collaborative Filtering Alg.pdf:application/pdf}
+}
+
+@article{rudin_stop_2019,
+	title = {Stop explaining black box machine learning models for high stakes decisions and use interpretable models instead},
+	volume = {1},
+	issn = {2522-5839},
+	url = {http://www.nature.com/articles/s42256-019-0048-x},
+	doi = {10.1038/s42256-019-0048-x},
+	language = {en},
+	number = {5},
+	urldate = {2021-03-28},
+	journal = {Nature Machine Intelligence},
+	author = {Rudin, Cynthia},
+	month = may,
+	year = {2019},
+	pages = {206--215},
+	file = {Rudin - 2019 - Stop explaining black box machine learning models .pdf:/Users/fwilhelm/Zotero/storage/4G29CJTH/Rudin - 2019 - Stop explaining black box machine learning models .pdf:application/pdf}
+}
+
+@article{ding_convex_2010,
+	title = {Convex and {Semi}-{Nonnegative} {Matrix} {Factorizations}},
+	volume = {32},
+	issn = {0162-8828},
+	url = {http://ieeexplore.ieee.org/document/4685898/},
+	doi = {10.1109/TPAMI.2008.277},
+	abstract = {We present several new variations on the theme of nonnegative matrix factorization (NMF). Considering factorizations of the form X = F GT , we focus on algorithms in which G is restricted to contain nonnegative entries, but allow the data matrix X to have mixed signs, thus extending the applicable range of NMF methods. We also consider algorithms in which the basis vectors of F are constrained to be convex combinations of the data points. This is used for a kernel extension of NMF. We provide algorithms for computing these new factorizations and we provide supporting theoretical analysis. We also analyze the relationships between our algorithms and clustering algorithms, and consider the implications for sparseness of solutions. Finally, we present experimental results that explore the properties of these new methods.},
+	language = {en},
+	number = {1},
+	urldate = {2021-03-29},
+	journal = {IEEE Transactions on Pattern Analysis and Machine Intelligence},
+	author = {Ding, C.H.Q. and {Tao Li} and Jordan, M.I.},
+	month = jan,
+	year = {2010},
+	pages = {45--55},
+	file = {Ding et al. - 2010 - Convex and Semi-Nonnegative Matrix Factorizations.pdf:/Users/fwilhelm/Zotero/storage/3Y7C7TQ5/Ding et al. - 2010 - Convex and Semi-Nonnegative Matrix Factorizations.pdf:application/pdf}
+}
+
+@article{hernando_non_2016,
+	title = {A non negative matrix factorization for collaborative filtering recommender systems based on a {Bayesian} probabilistic model},
+	volume = {97},
+	issn = {09507051},
+	url = {https://linkinghub.elsevier.com/retrieve/pii/S0950705115005006},
+	doi = {10.1016/j.knosys.2015.12.018},
+	abstract = {In this paper we present a novel technique for predicting the tastes of users in recommender systems based on collaborative filtering. Our technique is based on factorizing the rating matrix into two non negative matrices whose components lie within the range [0, 1] with an understandable probabilistic meaning. Thanks to this decomposition we can accurately predict the ratings of users, find out some groups of users with the same tastes, as well as justify and understand the recommendations our technique provides.},
+	language = {en},
+	urldate = {2021-03-29},
+	journal = {Knowledge-Based Systems},
+	author = {Hernando, Antonio and Bobadilla, Jesús and Ortega, Fernando},
+	month = apr,
+	year = {2016},
+	pages = {188--202},
+	file = {Hernando et al. - 2016 - A non negative matrix factorization for collaborat.pdf:/Users/fwilhelm/Zotero/storage/XBSD5ABI/Hernando et al. - 2016 - A non negative matrix factorization for collaborat.pdf:application/pdf}
+}
+
+
+@inproceedings{pan_one-class_2008,
+	address = {Pisa, Italy},
+	title = {One-{Class} {Collaborative} {Filtering}},
+	isbn = {978-0-7695-3502-9},
+	url = {http://ieeexplore.ieee.org/document/4781145/},
+	doi = {10.1109/ICDM.2008.16},
+	urldate = {2021-04-12},
+	booktitle = {2008 {Eighth} {IEEE} {International} {Conference} on {Data} {Mining}},
+	publisher = {IEEE},
+	author = {Pan, Rong and Zhou, Yunhong and Cao, Bin and Liu, Nathan N. and Lukose, Rajan and Scholz, Martin and Yang, Qiang},
+	month = dec,
+	year = {2008},
+	pages = {502--511},
+	file = {Submitted Version:/Users/fwilhelm/Zotero/storage/VHSEKFLN/Pan et al. - 2008 - One-Class Collaborative Filtering.pdf:application/pdf}
+}
+
+
+
+@inproceedings{hu_collaborative_2008,
+	address = {Pisa, Italy},
+	title = {Collaborative {Filtering} for {Implicit} {Feedback} {Datasets}},
+	isbn = {978-0-7695-3502-9},
+	url = {http://ieeexplore.ieee.org/document/4781121/},
+	doi = {10.1109/ICDM.2008.22},
+	abstract = {A common task of recommender systems is to improve customer experience through personalized recommendations based on prior implicit feedback. These systems passively track different sorts of user behavior, such as purchase history, watching habits and browsing activity, in order to model user preferences. Unlike the much more extensively researched explicit feedback, we do not have any direct input from the users regarding their preferences. In particular, we lack substantial evidence on which products consumer dislike. In this work we identify unique properties of implicit feedback datasets. We propose treating the data as indication of positive and negative preference associated with vastly varying confidence levels. This leads to a factor model which is especially tailored for implicit feedback recommenders. We also suggest a scalable optimization procedure, which scales linearly with the data size. The algorithm is used successfully within a recommender system for television shows. It compares favorably with well tuned implementations of other known methods. In addition, we offer a novel way to give explanations to recommendations given by this factor model.},
+	language = {en},
+	urldate = {2021-04-05},
+	booktitle = {2008 {Eighth} {IEEE} {International} {Conference} on {Data} {Mining}},
+	publisher = {IEEE},
+	author = {Hu, Yifan and Koren, Yehuda and Volinsky, Chris},
+	month = dec,
+	year = {2008},
+	pages = {263--272},
+	organization={Ieee},
+	file = {Hu et al. - 2008 - Collaborative Filtering for Implicit Feedback Data.pdf:/Users/fwilhelm/Zotero/storage/T6BZQV82/Hu et al. - 2008 - Collaborative Filtering for Implicit Feedback Data.pdf:application/pdf}
+}
+
+@inproceedings{mnih_probabilistic_2007,
+author = {Salakhutdinov, Ruslan and Mnih, Andriy},
+title = {Probabilistic {Matrix} {Factorization}},
+year = {2007},
+isbn = {9781605603520},
+publisher = {Curran Associates Inc.},
+address = {Red Hook, NY, USA},
+abstract = {Many existing approaches to collaborative filtering can neither handle very large datasets nor easily deal with users who have very few ratings. In this paper we present the Probabilistic Matrix Factorization (PMF) model which scales linearly with the number of observations and, more importantly, performs well on the large, sparse, and very imbalanced Netflix dataset. We further extend the PMF model to include an adaptive prior on the model parameters and show how the model capacity can be controlled automatically. Finally, we introduce a constrained version of the PMF model that is based on the assumption that users who have rated similar sets of movies are likely to have similar preferences. The resulting model is able to generalize considerably better for users with very few ratings. When the predictions of multiple PMF models are linearly combined with the predictions of Restricted Boltzmann Machines models, we achieve an error rate of 0.8861, that is nearly 7% better than the score of Netflix's own system.},
+booktitle = {Proceedings of the 20th International Conference on Neural Information Processing Systems},
+pages = {1257–1264},
+numpages = {8},
+location = {Vancouver, British Columbia, Canada},
+series = {NIPS'07}
+}
+
+
+
+@article{lee_learning_1999,
+	title = {Learning the parts of objects by non-negative matrix factorization},
+	volume = {401},
+	issn = {0028-0836, 1476-4687},
+	url = {http://www.nature.com/articles/44565},
+	doi = {10.1038/44565},
+	language = {en},
+	number = {6755},
+	urldate = {2021-04-12},
+	journal = {Nature},
+	author = {Lee, Daniel D. and Seung, H. Sebastian},
+	month = oct,
+	year = {1999},
+	pages = {788--791},
+	file = {Lee and Seung - 1999 - Learning the parts of objects by non-negative matr.pdf:/Users/fwilhelm/Zotero/storage/EZWFRKZZ/Lee and Seung - 1999 - Learning the parts of objects by non-negative matr.pdf:application/pdf}
+}
+
+
+
+@article{lee_algorithms_2001,
+	title = {Algorithms for {Non}-negative {Matrix} {Factorization}},
+author = {Lee, Daniel and Seung, Hyunjune},
+year = {2001},
+month = {02},
+pages = {},
+volume = {13},
+journal = {Adv. Neural Inform. Process. Syst.}
+}
+}
+
+
+
+@inproceedings{ding_equivalence_2005,
+	title = {On the {Equivalence} of {Nonnegative} {Matrix} {Factorization} and {Spectral} {Clustering}},
+	isbn = {978-0-89871-593-4 978-1-61197-275-7},
+	url = {https://epubs.siam.org/doi/10.1137/1.9781611972757.70},
+	doi = {10.1137/1.9781611972757.70},
+	abstract = {Current nonnegative matrix factorization (NMF) deals with X = F GT type. We provide a systematic analysis and extensions of NMF to the symmetric W = HHT , and the weighted W = HSHT . We show that (1) W = HHT is equivalent to Kernel K-means clustering and the Laplacian-based spectral clustering. (2) X = F GT is equivalent to simultaneous clustering of rows and columns of a bipartite graph. Algorithms are given for computing these symmetric NMFs.},
+	language = {en},
+	urldate = {2021-04-13},
+	booktitle = {Proceedings of the 2005 {SIAM} {International} {Conference} on {Data} {Mining}},
+	publisher = {Society for Industrial and Applied Mathematics},
+	author = {Ding, Chris and He, Xiaofeng and Simon, Horst D.},
+	month = apr,
+	year = {2005},
+	pages = {606--610},
+	file = {Ding et al. - 2005 - On the Equivalence of Nonnegative Matrix Factoriza.pdf:/Users/fwilhelm/Zotero/storage/58LVUF5W/Ding et al. - 2005 - On the Equivalence of Nonnegative Matrix Factoriza.pdf:application/pdf}
+}
+
+@InProceedings{faleiros_equivalence_2016,
+  author    = {Thiago de Paulo Faleiros and Alneu de Andrade Lopes},
+  title     = {On the equivalence between algorithms for Non-negative Matrix Factorization and Latent Dirichlet Allocation},
+  booktitle = {24 th European Symposium on Artificial Neural Networks, Computational Intelligence and Machine Learning},
+  year      = {2016},
+}
+
+
+@misc{kula2017spotlight,
+  title={Spotlight},
+  author={Kula, Maciej},
+  year={2017},
+  publisher={GitHub},
+  howpublished={\url{https://github.com/maciejkula/spotlight}},
+}
+
+@Article{harris2020array,
+ title         = {Array programming with {NumPy}},
+ author        = {Charles R. Harris and K. Jarrod Millman and St{'{e}}fan J.
+                 van der Walt and Ralf Gommers and Pauli Virtanen and David
+                 Cournapeau and Eric Wieser and Julian Taylor and Sebastian
+                 Berg and Nathaniel J. Smith and Robert Kern and Matti Picus
+                 and Stephan Hoyer and Marten H. van Kerkwijk and Matthew
+                 Brett and Allan Haldane and Jaime Fern{'{a}}ndez del
+                 R{'{\i}}o and Mark Wiebe and Pearu Peterson and Pierre
+                 G{'{e}}rard-Marchant and Kevin Sheppard and Tyler Reddy and
+                 Warren Weckesser and Hameer Abbasi and Christoph Gohlke and
+                 Travis E. Oliphant},
+ year          = {2020},
+ month         = sep,
+ journal       = {Nature},
+ volume        = {585},
+ number        = {7825},
+ pages         = {357--362},
+ doi           = {10.1038/s41586-020-2649-2},
+ publisher     = {Springer Science and Business Media {LLC}},
+ url           = {https://doi.org/10.1038/s41586-020-2649-2}
+}
+
+
+@article{goodbooks2017,
+    author = {Zajac, Zygmunt},
+    title = {Goodbooks-10k: a new dataset for book recommendations},
+    year = {2017},
+    publisher = {FastML},
+    journal = {FastML},
+    howpublished = {\url{http://fastml.com/goodbooks-10k}},
+}
+
+
+@article{hoffman2013,
+  author  = {Matthew D. Hoffman and David M. Blei and Chong Wang and John Paisley},
+  title   = {Stochastic Variational Inference},
+  journal = {Journal of Machine Learning Research},
+  year    = {2013},
+  volume  = {14},
+  number  = {4},
+  pages   = {1303-1347},
+  url     = {http://jmlr.org/papers/v14/hoffman13a.html}
+}
+
+
+
+@article{wingate_automated_2013,
+	title = {Automated {Variational} {Inference} in {Probabilistic} {Programming}},
+	url = {http://arxiv.org/abs/1301.1299},
+	abstract = {We present a new algorithm for approximate inference in probabilistic programs, based on a stochastic gradient for variational programs. This method is efficient without restrictions on the probabilistic program; it is particularly practical for distributions which are not analytically tractable, including highly structured distributions that arise in probabilistic programs. We show how to automatically derive mean-field probabilistic programs and optimize them, and demonstrate that our perspective improves inference efficiency over other algorithms.},
+	urldate = {2021-04-18},
+	journal = {arXiv:1301.1299 [cs, stat]},
+	author = {Wingate, David and Weber, Theophane},
+	month = jan,
+	year = {2013},
+	note = {arXiv: 1301.1299},
+	keywords = {Computer Science - Machine Learning, Statistics - Machine Learning, Computer Science - Artificial Intelligence},
+	file = {arXiv Fulltext PDF:/Users/fwilhelm/Zotero/storage/Z95VZFUT/Wingate and Weber - 2013 - Automated Variational Inference in Probabilistic P.pdf:application/pdf}
+}
+
+
+@article{ranganath_black_2013,
+	title = {Black {Box} {Variational} {Inference}},
+	url = {http://arxiv.org/abs/1401.0118},
+	abstract = {Variational inference has become a widely used method to approximate posteriors in complex latent variables models. However, deriving a variational inference algorithm generally requires significant model-specific analysis, and these efforts can hinder and deter us from quickly developing and exploring a variety of models for a problem at hand. In this paper, we present a "black box" variational inference algorithm, one that can be quickly applied to many models with little additional derivation. Our method is based on a stochastic optimization of the variational objective where the noisy gradient is computed from Monte Carlo samples from the variational distribution. We develop a number of methods to reduce the variance of the gradient, always maintaining the criterion that we want to avoid difficult model-based derivations. We evaluate our method against the corresponding black box sampling based methods. We find that our method reaches better predictive likelihoods much faster than sampling methods. Finally, we demonstrate that Black Box Variational Inference lets us easily explore a wide space of models by quickly constructing and evaluating several models of longitudinal healthcare data.},
+	urldate = {2021-04-18},
+	journal = {arXiv:1401.0118 [cs, stat]},
+	author = {Ranganath, Rajesh and Gerrish, Sean and Blei, David M.},
+	month = dec,
+	year = {2013},
+	note = {arXiv: 1401.0118},
+	keywords = {Computer Science - Machine Learning, Statistics - Machine Learning, Statistics - Computation, Statistics - Methodology},
+	file = {arXiv Fulltext PDF:/Users/fwilhelm/Zotero/storage/NTFSSJ93/Ranganath et al. - 2013 - Black Box Variational Inference.pdf:application/pdf;arXiv.org Snapshot:/Users/fwilhelm/Zotero/storage/EFZEKAUG/1401.html:text/html}
+}
+
+@book{gelman2014,
+  added-at = {2009-10-28T04:42:52.000+0100},
+  author = {Gelman, Andrew and Carlin, John B. and Stern, Hal S. and Rubin, Donald B.},
+  biburl = {https://www.bibsonomy.org/bibtex/2f7d7012c81d89965db2cfedf698f53c7/jwbowers},
+  citeulike-article-id = {106919},
+  date-added = {2007-09-03 22:45:16 -0500},
+  date-modified = {2007-09-03 22:45:16 -0500},
+  edition = {2nd ed.},
+  interhash = {9c5f4ce8c45003080aa52ac74eb4c78c},
+  intrahash = {f7d7012c81d89965db2cfedf698f53c7},
+  keywords = {bayesian statistics},
+  publisher = {Chapman and Hall/CRC},
+  timestamp = {2009-10-28T04:43:08.000+0100},
+  title = {Bayesian Data Analysis},
+  year = 2004
+}
+
+
+
+@article{kingma_adam_2014,
+author = {Kingma, Diederik and Ba, Jimmy},
+year = {2014},
+month = {12},
+pages = {},
+title = {Adam: A Method for Stochastic Optimization},
+journal = {International Conference on Learning Representations}
+}
+
+
+@inproceedings{wang_collaborative_2011,
+	address = {San Diego, California, USA},
+	title = {Collaborative topic modeling for recommending scientific articles},
+	isbn = {978-1-4503-0813-7},
+	url = {http://dl.acm.org/citation.cfm?doid=2020408.2020480},
+	doi = {10.1145/2020408.2020480},
+	abstract = {Researchers have access to large online archives of scientific articles. As a consequence, finding relevant papers has become more difficult. Newly formed online communities of researchers sharing citations provides a new way to solve this problem. In this paper, we develop an algorithm to recommend scientific articles to users of an online community. Our approach combines the merits of traditional collaborative filtering and probabilistic topic modeling. It provides an interpretable latent structure for users and items, and can form recommendations about both existing and newly published articles. We study a large subset of data from CiteULike, a bibliography sharing service, and show that our algorithm provides a more effective recommender system than traditional collaborative filtering.},
+	language = {en},
+	urldate = {2021-04-18},
+	booktitle = {Proceedings of the 17th {ACM} {SIGKDD} international conference on {Knowledge} discovery and data mining - {KDD} '11},
+	publisher = {ACM Press},
+	author = {Wang, Chong and Blei, David M.},
+	year = {2011},
+	pages = {448},
+	annote = {Related Work},
+	file = {Wang and Blei - 2011 - Collaborative topic modeling for recommending scie.pdf:/Users/fwilhelm/Zotero/storage/D6X72WE3/Wang and Blei - 2011 - Collaborative topic modeling for recommending scie.pdf:application/pdf}
+}
+
+
+@inproceedings{rao_divide_2017,
+	title = {Divide and {Transfer}: {Understanding} {Latent} {Factors} for {Recommendation} {Tasks}},
+  author={Rao, Vidyadhar and Rosni, KV and Padmanabhan, Vineet},
+  booktitle={RecSysKTL},
+  pages={1--8},
+  year={2017}
+}
+
+
+@inproceedings{beutel_latent_2018,
+	address = {Marina Del Rey CA USA},
+	title = {Latent {Cross}: {Making} {Use} of {Context} in {Recurrent} {Recommender} {Systems}},
+	isbn = {978-1-4503-5581-0},
+	shorttitle = {Latent {Cross}},
+	url = {https://dl.acm.org/doi/10.1145/3159652.3159727},
+	doi = {10.1145/3159652.3159727},
+	abstract = {The success of recommender systems often depends on their ability to understand and make use of the context of the recommendation request. Significant research has focused on how time, location, interfaces, and a plethora of other contextual features affect recommendations. However, in using deep neural networks for recommender systems, researchers often ignore these contexts or incorporate them as ordinary features in the model.},
+	language = {en},
+	urldate = {2021-04-11},
+	booktitle = {Proceedings of the {Eleventh} {ACM} {International} {Conference} on {Web} {Search} and {Data} {Mining}},
+	publisher = {ACM},
+	author = {Beutel, Alex and Covington, Paul and Jain, Sagar and Xu, Can and Li, Jia and Gatto, Vince and Chi, Ed H.},
+	month = feb,
+	year = {2018},
+	pages = {46--54},
+	annote = {Zeigt, dass neuronale Netze low rank approximations nicht gut approximieren},
+	file = {Beutel et al. - 2018 - Latent Cross Making Use of Context in Recurrent R.pdf:/Users/fwilhelm/Zotero/storage/RPPS8XCY/Beutel et al. - 2018 - Latent Cross Making Use of Context in Recurrent R.pdf:application/pdf}
+}
+
+
+@article{datta_latent_2018,
+	title = {Latent {Factor} {Interpretations} for {Collaborative} {Filtering}},
+	url = {http://arxiv.org/abs/1711.10816},
+	abstract = {Many machine learning systems utilize latent factors as internal representations for making predictions. Since these latent factors are largely uninterpreted, however, predictions made using them are opaque. Collaborative filtering via matrix factorization is a prime example of such an algorithm that uses uninterpreted latent features, and yet has seen widespread adoption for many recommendation tasks. We present Latent Factor Interpretation (LFI), a method for interpreting models by leveraging interpretations of latent factors in terms of humanunderstandable features. The interpretation of latent factors can then replace the uninterpreted latent factors, resulting in a new model that expresses predictions in terms of interpretable features. This new model can then be interpreted using recently developed model explanation techniques. In this paper we develop LFI for collaborative filtering based recommender systems. We illustrate the use of LFI interpretations on the MovieLens dataset, integrating auxiliary features from IMDB and DB tropes, and show that latent factors can be predicted with sufficient accuracy for replicating the predictions of the true model.},
+	language = {en},
+	urldate = {2021-04-18},
+	journal = {arXiv:1711.10816 [cs]},
+	author = {Datta, Anupam and Kovaleva, Sophia and Mardziel, Piotr and Sen, Shayak},
+	month = apr,
+	year = {2018},
+	note = {arXiv: 1711.10816},
+	keywords = {Computer Science - Information Retrieval},
+	annote = {Related work interpretability},
+	file = {Datta et al. - 2018 - Latent Factor Interpretations for Collaborative Fi.pdf:/Users/fwilhelm/Zotero/storage/IGGMM8YT/Datta et al. - 2018 - Latent Factor Interpretations for Collaborative Fi.pdf:application/pdf}
+}
+
+
+
+@article{trask_neural_2018,
+	title = {Neural {Arithmetic} {Logic} {Units}},
+	abstract = {Neural networks can learn to represent and manipulate numerical information, but they seldom generalize well outside of the range of numerical values encountered during training. To encourage more systematic numerical extrapolation, we propose an architecture that represents numerical quantities as linear activations which are manipulated using primitive arithmetic operators, controlled by learned gates. We call this module a neural arithmetic logic unit (NALU), by analogy to the arithmetic logic unit in traditional processors. Experiments show that NALU-enhanced neural networks can learn to track time, perform arithmetic over images of numbers, translate numerical language into real-valued scalars, execute computer code, and count objects in images. In contrast to conventional architectures, we obtain substantially better generalization both inside and outside of the range of numerical values encountered during training, often extrapolating orders of magnitude beyond trained numerical ranges.},
+	language = {en},
+	year = {2018},
+	author = {Trask, Andrew and Hill, Felix and Reed, Scott E and Rae, Jack and Dyer, Chris and Blunsom, Phil},
+	pages = {10},
+	annote = {Leute gehen die Tatsache mit der Multiplication an.
+ 
+IN CONCLUSION WEGEN skalar product},
+	file = {Trask et al. - Neural Arithmetic Logic Units.pdf:/Users/fwilhelm/Zotero/storage/VW5WL6YW/Trask et al. - Neural Arithmetic Logic Units.pdf:application/pdf}
+}
+
+
+@article{madsen_neural_2020,
+	title = {Neural {Arithmetic} {Units}},
+	url = {http://arxiv.org/abs/2001.05016},
+	abstract = {Neural networks can approximate complex functions, but they struggle to perform exact arithmetic operations over real numbers. The lack of inductive bias for arithmetic operations leaves neural networks without the underlying logic necessary to extrapolate on tasks such as addition, subtraction, and multiplication. We present two new neural network components: the Neural Addition Unit (NAU), which can learn exact addition and subtraction; and the Neural Multiplication Unit (NMU) that can multiply subsets of a vector. The NMU is, to our knowledge, the first arithmetic neural network component that can learn to multiply elements from a vector, when the hidden size is large. The two new components draw inspiration from a theoretical analysis of recently proposed arithmetic components. We find that careful initialization, restricting parameter space, and regularizing for sparsity is important when optimizing the NAU and NMU. Our proposed units NAU and NMU, compared with previous neural units, converge more consistently, have fewer parameters, learn faster, can converge for larger hidden sizes, obtain sparse and meaningful weights, and can extrapolate to negative and small values.},
+	language = {en},
+	urldate = {2021-04-11},
+	journal = {arXiv:2001.05016 [cs]},
+	author = {Madsen, Andreas and Johansen, Alexander Rosenberg},
+	month = jan,
+	year = {2020},
+	note = {arXiv: 2001.05016},
+	keywords = {Computer Science - Neural and Evolutionary Computing},
+	annote = {Comment: International Conference on Learning Representations, 2020},
+	annote = {Zusammen mir NALU},
+	file = {Madsen and Johansen - 2020 - Neural Arithmetic Units.pdf:/Users/fwilhelm/Zotero/storage/WYJIJM5Q/Madsen and Johansen - 2020 - Neural Arithmetic Units.pdf:application/pdf}
+}
+
+
+
+@article{mcauliffe_supervised_2010,
+	title = {Supervised {Topic} {Models}},
+	abstract = {We introduce supervised latent Dirichlet allocation (sLDA), a statistical model of labelled documents. The model accommodates a variety of response types. We derive a maximum-likelihood procedure for parameter estimation, which relies on variational approximations to handle intractable posterior expectations. Prediction problems motivate this research: we use the fitted model to predict response values for new documents. We test sLDA on two real-world problems: movie ratings predicted from reviews, and web page popularity predicted from text descriptions. We illustrate the benefits of sLDA versus modern regularized regression, as well as versus an unsupervised LDA analysis followed by a separate regression.},
+	language = {en},
+	author = {Mcauliffe, Jon D and Blei, David M},
+	pages = {8},
+	journal = {Advances in Neural Information Processing Systems},
+	month = {03},
+	volume = {3},
+	year = {2010},
+	annote = {Related Work LDA:
+In fact, in [8] the authors give recommender systems as an example, albeit more in the context of sentiment analysis: the authors predict the rating a user gives a movie based on the text of this user’s review.
+from SVDA-LDA},
+	file = {Mcauliffe and Blei - Supervised Topic Models.pdf:/Users/fwilhelm/Zotero/storage/K7TEN3WZ/Mcauliffe and Blei - Supervised Topic Models.pdf:application/pdf}
+}
+
+
+@incollection{pichardo_lagunas_svd-lda_2015,
+	address = {Cham},
+	title = {{SVD}-{LDA}: {Topic} {Modeling} for {Full}-{Text} {Recommender} {Systems}},
+	volume = {9414},
+	isbn = {978-3-319-27100-2 978-3-319-27101-9},
+	shorttitle = {{SVD}-{LDA}},
+	url = {http://link.springer.com/10.1007/978-3-319-27101-9_5},
+	abstract = {In recommender systems, matrix decompositions, in particular singular value decomposition (SVD), represent users and items as vectors of features and allow for additional terms in the decomposition to account for other available information. In text mining, topic modeling, in particular latent Dirichlet allocation (LDA), are designed to extract topical content of a large corpus of documents. In this work, we present a unified SVD-LDA model that aims to improve SVD-based recommendations for items with textual content with topic modeling of this content. We develop a training algorithm for SVD-LDA based on a first order approximation to Gibbs sampling and show significant improvements in recommendation quality.},
+	language = {en},
+	urldate = {2021-04-18},
+	booktitle = {Advances in {Artificial} {Intelligence} and {Its} {Applications}},
+	publisher = {Springer International Publishing},
+	author = {Nikolenko, Sergey},
+	editor = {Pichardo Lagunas, Obdulia and Herrera Alcántara, Oscar and Arroyo Figueroa, Gustavo},
+	year = {2015},
+	doi = {10.1007/978-3-319-27101-9_5},
+	note = {Series Title: Lecture Notes in Computer Science},
+	pages = {67--79},
+	annote = {Related Work: Hier auch LDA aber eher im Sinne von zusätlich also Hybrid.},
+	file = {Nikolenko - 2015 - SVD-LDA Topic Modeling for Full-Text Recommender .pdf:/Users/fwilhelm/Zotero/storage/XV2AM8P5/Nikolenko - 2015 - SVD-LDA Topic Modeling for Full-Text Recommender .pdf:application/pdf}
+}
+
+
+@article{lin_why_2017,
+	title = {Why does deep and cheap learning work so well?},
+	volume = {168},
+	issn = {0022-4715, 1572-9613},
+	url = {http://arxiv.org/abs/1608.08225},
+	doi = {10.1007/s10955-017-1836-5},
+	abstract = {We show how the success of deep learning could depend not only on mathematics but also on physics: although well-known mathematical theorems guarantee that neural networks can approximate arbitrary functions well, the class of functions of practical interest can frequently be approximated through "cheap learning" with exponentially fewer parameters than generic ones. We explore how properties frequently encountered in physics such as symmetry, locality, compositionality, and polynomial log-probability translate into exceptionally simple neural networks. We further argue that when the statistical process generating the data is of a certain hierarchical form prevalent in physics and machine-learning, a deep neural network can be more efficient than a shallow one. We formalize these claims using information theory and discuss the relation to the renormalization group. We prove various "no-flattening theorems" showing when efficient linear deep networks cannot be accurately approximated by shallow ones without efficiency loss, for example, we show that \$n\$ variables cannot be multiplied using fewer than 2{\textasciicircum}n neurons in a single hidden layer.},
+	language = {en},
+	number = {6},
+	urldate = {2021-04-11},
+	journal = {Journal of Statistical Physics},
+	author = {Lin, Henry W. and Tegmark, Max and Rolnick, David},
+	month = sep,
+	year = {2017},
+	note = {arXiv: 1608.08225},
+	keywords = {Computer Science - Machine Learning, Statistics - Machine Learning, Computer Science - Neural and Evolutionary Computing, Condensed Matter - Disordered Systems and Neural Networks},
+	pages = {1223--1247},
+	annote = {Comment: Replaced to match version published in Journal of Statistical Physics: https://link.springer.com/article/10.1007/s10955-017-1836-5 Improved refs \& discussion, typos fixed. 16 pages, 3 figs},
+	annote = {Reinnehmen wegen der Multiplication (11)},
+	file = {Lin et al. - 2017 - Why does deep and cheap learning work so well.pdf:/Users/fwilhelm/Zotero/storage/S3FAP25H/Lin et al. - 2017 - Why does deep and cheap learning work so well.pdf:application/pdf}
+}
+
+@article{chemudugunta_swb_2006,
+ author = {Chemudugunta, Chaitanya and Smyth, Padhraic and Steyvers, Mark},
+ journal = {Advances in Neural Information Processing Systems},
+ editor = {B. Sch\"{o}lkopf and J. Platt and T. Hoffman},
+ pages = {},
+ publisher = {MIT Press},
+ title = {Modeling General and Specific Aspects of Documents with a Probabilistic Topic Model},
+ url = {https://proceedings.neurips.cc/paper/2006/file/ec47a5de1ebd60f559fee4afd739d59b-Paper.pdf},
+ volume = {19},
+ year = {2007}
+}
+
+@inproceedings{shan_gpmf_2010,
+author = {Shan, Hanhuai and Banerjee, Arindam},
+month = {12},
+title = {Generalized Probabilistic Matrix Factorizations for Collaborative Filtering},
+doi = {10.1109/ICDM.2010.116},
+  booktitle={2010 IEEE International Conference on Data Mining},
+  pages={1025--1030},
+  year={2010},
+  organization={IEEE}
+}
+
+@book{udhr1948,
+  author = {{United Nations}},
+  title = {Universal Declaration of Human Rights},
+  year = {1948},
+  month = dec,
+  venue = {Paris},
+  month_numeric = {12}
+}
+
+
+@article{Peterson_Hamrouni_2022, title={Preliminary Thoughts on Defining f(x) for Ethical Machines}, volume={35}, url={https://journals.flvc.org/FLAIRS/article/view/130545}, DOI={10.32473/flairs.v35i.130545}, abstractNote={&amp;lt;p&amp;gt;There is a growing literature in machine ethics attempting at creating ethical machines through AI and machine learning. Although many concerns with respect to such attempts have been raised, including the difficulties regarding the gathering of relevant contextual information as well as solving ethical dilemmas, it appears that many fundamental ethical notions have been overlooked in the implementation of normative theories to machines. This paper provides a preliminary analysis of important aspects that need to be taken into account in the attempt of defining so called ethical machines.&amp;lt;/p&amp;gt;}, journal={The International FLAIRS Conference Proceedings}, author={Peterson, Clayton and Hamrouni, Naïma}, year={2022}, month={May} }
+
+
+@article{dacrema_are_2019,
+	title = {Are {We} {Really} {Making} {Much} {Progress}? {A} {Worrying} {Analysis} of {Recent} {Neural} {Recommendation} {Approaches}},
+	shorttitle = {Are {We} {Really} {Making} {Much} {Progress}?},
+	url = {http://arxiv.org/abs/1907.06902},
+	doi = {10.1145/3298689.3347058},
+	abstract = {Deep learning techniques have become the method of choice for researchers working on algorithmic aspects of recommender systems. With the strongly increased interest in machine learning in general, it has, as a result, become difficult to keep track of what represents the state-of-the-art at the moment, e.g., for top-n recommendation tasks. At the same time, several recent publications point out problems in today's research practice in applied machine learning, e.g., in terms of the reproducibility of the results or the choice of the baselines when proposing new models. In this work, we report the results of a systematic analysis of algorithmic proposals for top-n recommendation tasks. Specifically, we considered 18 algorithms that were presented at top-level research conferences in the last years. Only 7 of them could be reproduced with reasonable effort. For these methods, it however turned out that 6 of them can often be outperformed with comparably simple heuristic methods, e.g., based on nearest-neighbor or graph-based techniques. The remaining one clearly outperformed the baselines but did not consistently outperform a well-tuned non-neural linear ranking method. Overall, our work sheds light on a number of potential problems in today's machine learning scholarship and calls for improved scientific practices in this area. Source code of our experiments and full results are available at: https://github.com/MaurizioFD/RecSys2019\_DeepLearning\_Evaluation.},
+	language = {en},
+	urldate = {2019-09-17},
+	journal = {Proceedings of the 13th ACM Conference on Recommender Systems  - RecSys '19},
+	author = {Dacrema, Maurizio Ferrari and Cremonesi, Paolo and Jannach, Dietmar},
+	year = {2019},
+	note = {arXiv: 1907.06902},
+	keywords = {Computer Science - Information Retrieval, Computer Science - Machine Learning, Computer Science - Neural and Evolutionary Computing},
+	pages = {101--109},
+	annote = {Comment: Source code available at: https://github.com/MaurizioFD/RecSys2019\_DeepLearning\_Evaluation},
+	file = {Dacrema et al. - 2019 - Are We Really Making Much Progress A Worrying Ana.pdf:/Users/fwilhelm/Zotero/storage/RBW8BNK5/Dacrema et al. - 2019 - Are We Really Making Much Progress A Worrying Ana.pdf:application/pdf}
+}
+
+
+@inproceedings{wilhelm2021lda4rec,
+author = {Wilhelm, Florian},
+title = {Matrix Factorization for Collaborative Filtering Is Just Solving an Adjoint Latent Dirichlet Allocation Model After All},
+year = {2021},
+month = sep,
+isbn = {978-1-4503-8458-2/21/09},
+publisher = {Association for Computing Machinery},
+address = {New York, NY, USA},
+url = {https://doi.org/10.1145/3460231.3474266},
+doi = {10.1145/3460231.3474266},
+booktitle = {Fifteenth ACM Conference on Recommender Systems},
+numpages = {8},
+location = {Amsterdam, Netherlands},
+series = {RecSys '21}
+}
+
+
+@article{Leskovec2007,
+   title={The dynamics of viral marketing},
+   volume={1},
+   ISSN={1559-114X},
+   url={http://dx.doi.org/10.1145/1232722.1232727},
+   DOI={10.1145/1232722.1232727},
+   number={1},
+   journal={ACM Transactions on the Web},
+   publisher={Association for Computing Machinery (ACM)},
+   author={Leskovec, Jure and Adamic, Lada A. and Huberman, Bernardo A.},
+   year={2007},
+   month={May},
+   pages={5}
+}
+
+@Article{jintelligence10030043,
+AUTHOR = {Hyland, William E. and Hoff, Kevin A. and Rounds, James},
+TITLE = {Interest–Ability Profiles: An Integrative Approach to Knowledge Acquisition},
+JOURNAL = {Journal of Intelligence},
+VOLUME = {10},
+YEAR = {2022},
+NUMBER = {3},
+ARTICLE-NUMBER = {43},
+URL = {https://www.mdpi.com/2079-3200/10/3/43},
+PubMedID = {35893274},
+ISSN = {2079-3200},
+ABSTRACT = {Cognitive abilities and interests both play an important role in guiding knowledge acquisition, but most previous studies have examined them separately. The current study used a large and representative dataset to integrate interests and abilities using a person-centered approach that examines how distinct profiles of interests and abilities relate to individual strengths and weaknesses in knowledge. Two key findings emerged. First, eight interest–ability profiles were generated from Latent Profile Analysis (LPA), which replicated and extended the interrelations of interests and abilities found in previous studies using variable-centered approaches. Second, each profile’s strongest knowledge scores corresponded to their strongest abilities and interests, highlighting the importance of interest–ability profiles for guiding the development of knowledge. Importantly, in some domains, the lower ability profiles were actually more knowledgeable than higher ability profiles. Overall, these findings suggest that people learn best when given opportunities to acquire knowledge relevant to both their interests and abilities. We discuss how interest–ability profiles inform integrative theories of psychological development and present implications for education and career development.},
+DOI = {10.3390/jintelligence10030043}
+}
+
+@article{AzizW14,
+  author       = {Haris Aziz and
+                  Toby Walsh},
+  title        = {Justified Representation in Approval-Based Committee Voting},
+  journal      = {CoRR},
+  volume       = {abs/1407.8269},
+  year         = {2014},
+  url          = {http://arxiv.org/abs/1407.8269},
+  eprinttype    = {arXiv},
+  eprint       = {1407.8269},
+  timestamp    = {Mon, 13 Aug 2018 16:47:26 +0200},
+  biburl       = {https://dblp.org/rec/journals/corr/AzizW14.bib},
+  bibsource    = {dblp computer science bibliography, https://dblp.org}
+}
+
+
+
+
+@article{aziz2017,
+  author       = {Haris Aziz and
+                  Anna Bogomolnaia and
+                  Herv{\'{e}} Moulin},
+  title        = {Fair mixing: the case of dichotomous preferences},
+  journal      = {CoRR},
+  volume       = {abs/1712.02542},
+  year         = {2017},
+  url          = {http://arxiv.org/abs/1712.02542},
+  eprinttype    = {arXiv},
+  eprint       = {1712.02542},
+  timestamp    = {Mon, 30 Jan 2023 21:01:48 +0100},
+  biburl       = {https://dblp.org/rec/journals/corr/abs-1712-02542.bib},
+  bibsource    = {dblp computer science bibliography, https://dblp.org}
+}
+
+@article{Bertsimas2012OnTE,
+  title={On the Efficiency-Fairness Trade-off},
+  author={Dimitris Bertsimas and Vivek F. Farias and Nikolaos Trichakis},
+  journal={Manag. Sci.},
+  year={2012},
+  volume={58},
+  pages={2234-2250},
+  url={https://api.semanticscholar.org/CorpusID:11472502}
+}
+
+@article{lawrence2020,
+author = {Lawrence, Liam and Simpson-Porco, John and Mallada, Enrique},
+year = {2020},
+month = {12},
+pages = {1-1},
+title = {Linear-Convex Optimal Steady-State Control},
+volume = {PP},
+journal = {IEEE Transactions on Automatic Control},
+doi = {10.1109/TAC.2020.3044275}
+}

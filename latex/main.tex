@@ -9,6 +9,11 @@
 \usepackage{amsthm}
 \usepackage{booktabs} 
 \usepackage{graphicx}
+
+\usepackage{tikz} % for tikz :) 
+\usetikzlibrary{fit} % for fitting the plate
+\tikzset{>=latex} % Sets the arrow style
+
 \usepackage{todonotes}
 \frenchspacing
 \setlength{\pdfpagewidth}{8.5in}
@@ -28,14 +33,12 @@
 % proceedings, working notes, and technical reports.  This file is made 
 % with minimal changes by explicit permission from AAAI.
 \title{Modeling and Mitigating Gender Bias in Matching Problems:\\ A~Simulation-Based Approach with Quota Constraints}
-\author{Author 1\\
-Affiliation 1\\
-Address Line 1.1\\
-Address Line 1.2\\
-\And Author 2\\
-Affiliation 2\\
-Address Line 2.1\\
-Address Line 2.2\\
+\author{Florian Wilhelm\\
+inovex GmbH\\
+76131 Karlsruhe, Germany\\
+\And Anja Pilz\\
+Damedic GmbH\\
+50677 Cologne, Germany\\ % how detailed should that be?
 }
 
 % Add data generating process, explain it
@@ -93,7 +96,7 @@ We define the \textit{efficiency} of a matching as
 \[
 \epsilon(\mu)=\frac{\eta(\mu)}{\eta^{\star}},
 \]
-where \(\eta^{\star}\) is the maximum optimality possible without any constraints like gender bias or quotas. Similarly, we define the efficiencies \( \epsilon_f \) and \( \epsilon_m\) for the subsets of women and men, respectively.
+where \(\eta^{\star}\) is the maximum optimality possible without any constraints like gender bias or quotas. Similarly, we define the efficiencies \( \epsilon_f \) and \( \epsilon_m\) for the subsets of females and males, respectively.
 
 To model discrimination, we introduce a \textit{bias adjustment} \( \beta \geq 0 \) that favors males by increasing their effective preferences. The \textit{biased preference function} is defined as:
 \[
@@ -162,10 +165,50 @@ To simulate the matching problem, we generate data for a fixed number of individ
 The generative process is governed by the preference concentration \( \alpha_\mathrm{prefs} \) and the capacity concentration \( \alpha_\mathrm{caps} \). By controlling the target TVD through resampling, we model the divergence between male and female preferences. This framework enables controlled simulation of gender-specific preferences and capacity distributions, providing the foundation for analyzing biased matching outcomes. A graphical representation of this process is shown in Figure~\ref{fig:plate_diagram}.
 
 
-
 \begin{figure}[ht]
   \centering
-  \includegraphics[width=0.9\linewidth]{plate_diagram.pdf}
+   \begin{tikzpicture}
+    [
+      observed/.style={circle, thick, draw, text width=2em, thick, align=center,fill=gray!50},
+      unobserved/.style={circle, thick, draw, text width=2em, align=center},
+      arr/.style={->, draw, thick}
+    ]
+    \node (eta) [unobserved] at (0,0) {$\eta$};
+    \node (pi-j) [unobserved] at (4,0) {$\pi_j$};
+    \node (x-ij) [observed] at (2,2) {$x_{i,j}$};
+    \node (c-j) [observed] at (4,2) {$c_j$};
+    \node (v-j) [unobserved] at (6,2) {$v_j$};
+    \node (alpha-caps) [unobserved] at (6,4) {$\alpha_{\text{caps}}$}; 
+    \node (u-tilde) [unobserved] at (2,4) {$\tilde{U}_i$};
+    \node (u-i) [unobserved] at (0,4) {$U_i$};
+    \node (beta) [unobserved] at (4,4) {$\beta$};
+    \node (g-i) [observed] at (2,6) {$g_i$};
+    \node (alpha-prefs) [unobserved] at (0,8) {$\alpha_{\text{prefs}}$};
+    \node (alpha) [unobserved] at (2,8) {$\boldsymbol{\alpha}^{(g)}$};
+    \node (TVD) [unobserved] at (4,8) {TVD};
+    \draw [arr] (alpha-prefs) -- (alpha);
+    \draw [arr] (alpha) -- (TVD);
+    \draw [arr] (g-i) -- (alpha);
+    \draw [arr] (g-i) -- (u-tilde);
+    \draw [arr] (u-i) -- (u-tilde);
+    \draw [arr] (beta) -- (u-tilde);
+    \draw [arr] (alpha) -- (u-i);
+    
+    \draw [arr] (u-tilde) -- (x-ij);
+    \draw [arr] (x-ij) -- (eta);
+    \draw [arr] (u-i) -- (eta);
+    \draw [arr] (c-j) -- (x-ij);
+
+    \draw [arr] (alpha-caps) -- (v-j);
+    \draw [arr] (v-j) -- (pi-j);
+    \draw [arr] (pi-j) -- (c-j);
+
+    \node [draw,fit=(g-i) (u-i) (x-ij), inner sep=10pt, thick] (plate-S) {};
+    \node [above right] at (plate-S.south west) {$|S|$};
+    \node [draw,fit=(x-ij) (v-j) (pi-j), inner sep=10pt, thick] (plate-O) {};
+    \node [above left] at (plate-O.south east) {$|O|$};
+  \end{tikzpicture}
+  %\includegraphics[width=0.9\linewidth]{plate_diagram.pdf}
 \caption{Plate diagram of the data generation and matching process. Gender assignments \( g_i \) are sampled from a balanced uniform distribution. For each gender, gender-specific preference priors \( \alpha^{(g)} \) are sampled from a Gamma distribution with parameter \( \alpha_\mathrm{prefs} \), and preferences \( U_i \) are drawn from the corresponding Dirichlet prior. A gender bias \( \beta \) is applied to the preferences of male individuals to favor males over females, resulting in biased preferences \( \tilde{U}_i \). The matching \( x_{ij} \) is determined by solving an ILP that maximizes \( \tilde{U}_i \) under capacity constraints \( c_j \), generated via stick-breaking with \( \alpha_\mathrm{caps} \), \( v_j \), and \( \pi_j \). The optimality \( \eta \) is evaluated using the unbiased preferences \( U_i \). Observable variables are indicated by shaded nodes. Plates represent the number of individuals \( |S| \) and positions \( |O| \).}
 \label{fig:plate_diagram}
 \end{figure}
@@ -188,17 +231,14 @@ T_j^{(g)} = \frac{\hat{\alpha}^{(g)}_j}{\hat{\alpha}^{(f)}_j + \hat{\alpha}^{(m)
 
 This mechanism effectively mitigates bias and promotes efficiency by reflecting the actual interests of the groups.
 
-To account for preference divergence, we tracked the TVD between gender-specific preferences. This allowed us to analyze the influence of preference divergence on outcomes, particularly when combining fixed and preference-based quota mechanisms.
-
+To account for preference divergence, we tracked TVD between gender-specific preferences. This allowed us to analyze the influence of preference divergence on outcomes, particularly when combining fixed and preference-based quota mechanisms.
 
 For our simulation experiments, we performed 100 test runs each with \( \alpha_\text{prefs} = 1 \) and \( \alpha_\text{caps} = 5 \) for 5 positions with a total capacity \( C \) of 100. In each run, a dataset with 250 individuals was generated, including two gender priors with corresponding TVD and individual preferences. For the given number of positions and total capacity, position capacities were generated using the specified parameters. The matching \( \mu \) was then determined for various biases and quotas, which was used to calculate the total and gender-specific efficiencies using the base case of \( \beta = 0 \) and \( q \geq 0\% \) for \(\eta^{\star}\). 
 
 \begin{figure}[ht]
-
   \centering
   \includegraphics[width=1.0\linewidth]{violin_plot.pdf}
 \caption{Violin plots illustrating the total efficiency distribution with bias \( \beta = 0.3 \). The distributions are shown for both high and low TVD scenarios, capturing density and variation within each quota category.}
-
   \label{fig:violin_plot}
 \end{figure}
 
@@ -212,11 +252,9 @@ Figure~\ref{fig:scatter_plot} illustrates scatter plots with robust regression l
 These findings highlight the advantages of integrating preference-based quotas into matching frameworks, especially under challenging scenarios of biased preferences and high divergence between groups.
 
 \begin{figure}[ht]
-
   \centering
   \includegraphics[width=1.0\linewidth]{scatter_plot.pdf}
 \caption{Scatter plots of efficiency against TVD for bias \( \beta = 0.2 \) and varying quota levels. The plots differentiate total efficiency, male efficiency, and female efficiency, with robust Theil-Sen regression lines included to illustrate trends across quota thresholds.}
-
   \label{fig:scatter_plot}
 \end{figure}
 

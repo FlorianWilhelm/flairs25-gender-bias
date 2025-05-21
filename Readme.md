@@ -1,5 +1,9 @@
 # Modeling and Mitigating Gender Bias in Matching Problems
 
+Accompanying source code to the paper "Modeling and Mitigating Gender Bias in Matching Problems:
+A Simulation-Based Approach with Quota Constraints" by Florian Wilhelm and Anja Pilz as presented
+at the [FLAIRS 2025](https://www.flairs-38.info/).
+
 ## Installation
 
 * Download, install [Pixi], and run `pixi install` once.

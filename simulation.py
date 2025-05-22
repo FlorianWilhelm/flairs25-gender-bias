@@ -286,6 +286,32 @@ def break_by_weights_even(total: int, weights: np.ndarray) -> np.ndarray:
     return int_parts
 
 
+def break_by_weights(total: int, weights: np.ndarray) -> np.ndarray:
+    """
+    Break a total number of items into components according to the given weights.
+
+    Parameters:
+        total (int): Total number of items to break.
+        weights (np.ndarray): Weights for each component.
+
+    Returns:
+        np.ndarray: Number of items in each component.
+    """
+    assert np.isclose(weights.sum(), 1), "Weights must sum to 1."
+
+    weights = weights / np.sum(weights)
+    float_parts = weights * total
+    int_parts = np.floor(float_parts).astype(int)
+    remainder = total - int_parts.sum()
+    residuals = float_parts - int_parts
+    indices = np.argsort(-residuals)[:remainder]
+    int_parts[indices] += 1
+    
+    assert int_parts.sum() == total, "Sum of parts does not match the total."
+    
+    return int_parts
+
+
 def gen_capacities(
     n_cap: int, total_cap: int, alpha: float, rng: Generator | int | None = None
 ) -> np.ndarray:

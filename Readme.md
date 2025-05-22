@@ -4,7 +4,7 @@ Accompanying source code to the paper "Modeling and Mitigating Gender Bias in Ma
 A Simulation-Based Approach with Quota Constraints" by Florian Wilhelm and Anja Pilz as presented
 at the [FLAIRS 2025](https://www.flairs-38.info/).
 
-You can also find the presentation slides [here](flairs 2025 fwilhelm.pdf).
+You can also find the presentation slides [here](flairs%202025%20fwilhelm.pdf).
 
 ## Installation
 
